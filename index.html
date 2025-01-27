@@ -29,7 +29,7 @@
             height: 50px;
         }
         header h1 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin: 0;
         }
         nav {
@@ -47,7 +47,7 @@
         .banner {
             width: 100%;
             height: auto;
-            max-height: 500px; /* Increased height */
+            max-height: 550px; /* Further increased height */
             object-fit: contain; /* Ensure full visibility */
             margin-top: 80px; /* Adjusted for fixed header */
         }
@@ -89,6 +89,18 @@
             position: absolute;
             left: 0;
         }
+        .client-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .client-logos img {
+            max-width: 150px;
+            height: auto;
+            object-fit: contain;
+        }
         p {
             text-align: justify;
             line-height: 1.6;
@@ -129,6 +141,19 @@
             <li>Delivered $2.6M in Attribution Model sales and increased ROAS by 22% for LATAM clients.</li>
             <li>Reduced Customer Acquisition Costs by 40% through advanced optimization algorithms.</li>
         </ul>
+    </section>
+
+    <section id="clients" class="container">
+        <h2>Trusted by Global Brands</h2>
+        <div class="client-logos">
+            <img src="nestle-logo.jpg" alt="Nestlé Logo">
+            <img src="lego-logo.svg" alt="LEGO Logo">
+            <img src="bmw-logo.jpg" alt="BMW Logo">
+            <img src="f1-logo.png" alt="Formula 1 Logo">
+            <img src="claro-logo.png" alt="Claro Logo">
+            <img src="rocket-logo.png" alt="Rocket Companies Logo">
+            <img src="spotify-logo.png" alt="Spotify Logo">
+        </div>
     </section>
 
     <section id="articles" class="container">
