@@ -16,7 +16,7 @@
         header {
             background-color: #4B0082;
             color: white;
-            padding: 0.8rem 2rem;
+            padding: 1rem 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -24,18 +24,17 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-sizing: border-box;
         }
         header h1 {
-            font-size: 1.6rem;
-            margin: 0;
-            flex: 1;
+            font-size: 1.8rem;
+            margin: 0 auto;
             text-align: center;
+            flex: 1;
         }
         nav {
             display: flex;
             gap: 1rem;
-            margin-left: auto;
+            margin-right: 1.5rem;
         }
         nav a {
             color: #FFFFFF;
@@ -47,9 +46,9 @@
         }
         .banner {
             width: 100%;
-            max-height: 400px;
-            object-fit: cover;
-            object-position: center;
+            height: auto;
+            max-height: 550px;
+            object-fit: contain;
             margin-top: 80px;
         }
         .container {
@@ -82,6 +81,7 @@
             margin: 0.5rem 0;
             padding-left: 25px;
             position: relative;
+            text-align: left;
         }
         ul li::before {
             content: '\2713';
@@ -105,6 +105,25 @@
             text-align: justify;
             line-height: 1.6;
         }
+        .linkedin-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #0077b5;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .linkedin-button:hover {
+            background-color: #005582;
+        }
+        .linkedin-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
         footer {
             text-align: center;
             padding: 1rem;
@@ -114,17 +133,6 @@
         footer a {
             color: #FFD700;
             text-decoration: none;
-        }
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.2rem;
-            }
-            .banner {
-                max-height: 250px;
-            }
-            nav {
-                gap: 0.5rem;
-            }
         }
     </style>
 </head>
@@ -137,7 +145,7 @@
         </nav>
     </header>
 
-    <img src="new-banner.jpg" alt="Updated Banner" class="banner">
+    <img src="updated-banner.jpg" alt="Updated Banner" class="banner">
 
     <section id="home" class="container">
         <h2>Welcome</h2>
@@ -174,6 +182,13 @@
             <li>Responsible and Explainable AI</li>
             <li>Optimizing customer acquisition and retention through data</li>
         </ul>
+    </section>
+
+    <section class="container">
+        <h2>Connect with Me</h2>
+        <a href="https://www.linkedin.com/in/themarketingscientist/" target="_blank" class="linkedin-button">
+            <img src="linkedin-icon.png" alt="LinkedIn" class="linkedin-icon"> LinkedIn
+        </a>
     </section>
 
     <footer>
