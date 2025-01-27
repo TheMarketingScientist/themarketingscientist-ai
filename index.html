@@ -11,16 +11,15 @@
             margin: 0;
             padding: 0;
             background-color: #f9f9f9;
-            color: #2C2C54; /* Updated to match logo colors */
+            color: #2C2C54;
         }
         header {
-            background-color: #4B0082; /* Updated to match logo purple */
+            background-color: #4B0082;
             color: white;
             padding: 1rem 1.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
         }
         header img {
             height: 50px;
@@ -54,40 +53,46 @@
         }
         section {
             margin-bottom: 2rem;
-            text-align: center;
         }
         h2 {
-            color: #4B0082; /* Updated to match logo purple */
+            color: #4B0082;
+            margin-bottom: 1rem;
         }
         .profile-photo {
             width: 150px;
             border-radius: 50%;
             margin: 1rem auto;
+            display: block;
         }
         ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
         ul li {
             margin: 0.5rem 0;
-            text-align: left;
-            padding-left: 20px;
+            padding-left: 25px;
             position: relative;
+            text-align: left;
         }
         ul li::before {
             content: '\2713';
-            color: #4B0082; /* Updated to match logo purple */
+            color: #4B0082;
             position: absolute;
             left: 0;
+        }
+        p {
+            text-align: justify;
+            line-height: 1.6;
         }
         footer {
             text-align: center;
             padding: 1rem;
-            background: #2C2C54; /* Updated to match logo navy */
+            background: #2C2C54;
             color: white;
         }
         footer a {
-            color: #FFD700; /* Updated to a complementary gold color */
+            color: #FFD700;
             text-decoration: none;
         }
     </style>
@@ -104,12 +109,12 @@
 
     <img src="linkedin-banner.jpg" alt="LinkedIn Banner" class="banner">
 
-    <section id="home">
+    <section id="home" class="container">
         <h2>Welcome</h2>
         <img src="profile.jpg" alt="Andrés Acosta" class="profile-photo">
         <p>I'm Andrés Acosta, an AI and Analytics Executive with over 15 years of experience transforming data into measurable business impact. My work has helped global brands unlock AI's full potential, delivering over $12 million in ROI while leading high-performing teams across LATAM and beyond.</p>
         <p>Explore my site to learn more about my expertise in AI strategy, analytics innovation, and driving sustainable growth through cutting-edge marketing solutions.</p>
-        <p><strong>Key Achievements:</strong></p>
+        <h3>Key Achievements:</h3>
         <ul>
             <li>Generated $600,000 in revenue in six months by scaling High-Value Audience Models across LATAM.</li>
             <li>Created the Creative Measurement Suite, driving $500,000 in sales in five months.</li>
@@ -118,7 +123,7 @@
         </ul>
     </section>
 
-    <section id="articles">
+    <section id="articles" class="container">
         <h2>Articles</h2>
         <p>Stay tuned for thought-provoking insights on AI, data science, and marketing innovation. I’ll be sharing articles on topics such as:</p>
         <ul>
