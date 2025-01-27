@@ -16,21 +16,22 @@
         header {
             background-color: #0056b3;
             color: white;
-            padding: 1.5rem;
-            text-align: center;
-            position: relative;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
         header img {
-            position: absolute;
-            top: 10px;
-            left: 10px;
             height: 50px;
+        }
+        header h1 {
+            font-size: 1.5rem;
+            margin: 0;
         }
         nav {
             display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
+            gap: 1.5rem;
         }
         nav a {
             color: white;
@@ -43,17 +44,20 @@
         .banner {
             width: 100%;
             height: auto;
+            max-height: 300px;
+            object-fit: cover;
         }
         .container {
             max-width: 800px;
             margin: 2rem auto;
-            padding: 1rem;
+            padding: 1.5rem;
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         section {
             margin-bottom: 2rem;
+            text-align: center;
         }
         h2 {
             color: #0056b3;
@@ -61,8 +65,7 @@
         .profile-photo {
             width: 150px;
             border-radius: 50%;
-            display: block;
-            margin: 0 auto 20px;
+            margin: 1rem auto;
         }
         footer {
             text-align: center;
@@ -98,11 +101,11 @@
 
         <section id="services">
             <h2>Services</h2>
-            <ul>
-                <li>Data Science Consulting</li>
-                <li>Marketing Analytics Solutions</li>
-                <li>Customer Segmentation and Insights</li>
-                <li>Attribution Modeling</li>
+            <ul style="list-style: none; padding: 0;">
+                <li>✅ Data Science Consulting</li>
+                <li>✅ Marketing Analytics Solutions</li>
+                <li>✅ Customer Segmentation and Insights</li>
+                <li>✅ Attribution Modeling</li>
             </ul>
         </section>
 
