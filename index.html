@@ -18,9 +18,13 @@
             color: white;
             padding: 1.5rem;
             text-align: center;
+            position: relative;
         }
-        header h1 {
-            margin: 0;
+        header img {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: 50px;
         }
         nav {
             display: flex;
@@ -36,6 +40,10 @@
         nav a:hover {
             text-decoration: underline;
         }
+        .banner {
+            width: 100%;
+            height: auto;
+        }
         .container {
             max-width: 800px;
             margin: 2rem auto;
@@ -49,6 +57,12 @@
         }
         h2 {
             color: #0056b3;
+        }
+        .profile-photo {
+            width: 150px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
         }
         footer {
             text-align: center;
@@ -64,6 +78,7 @@
 </head>
 <body>
     <header>
+        <img src="logo.png" alt="The Marketing Scientist Logo">
         <h1>The Marketing Scientist</h1>
         <nav>
             <a href="#home">Home</a>
@@ -72,9 +87,12 @@
         </nav>
     </header>
 
+    <img src="linkedin-banner.jpg" alt="LinkedIn Banner" class="banner">
+
     <div class="container">
         <section id="home">
             <h2>Welcome</h2>
+            <img src="profile.jpg" alt="Your Name" class="profile-photo">
             <p>Your go-to destination for data-driven marketing solutions. Explore insights, strategies, and services tailored to elevate your brand.</p>
         </section>
 
@@ -95,7 +113,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 The Marketing Scientist. Built with ?? and GitHub Pages. <a href="#">Privacy Policy</a></p>
+        <p>&copy; 2025 The Marketing Scientist. Built with ❤️ and GitHub Pages. <a href="#">Privacy Policy</a></p>
     </footer>
 </body>
 </html>
