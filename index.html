@@ -26,15 +26,14 @@
             z-index: 1000;
         }
         header h1 {
-            font-size: 2rem;
-            margin: 0 auto;
-            text-align: center;
+            font-size: 1.8rem;
+            margin: 0;
             flex: 1;
+            text-align: center;
         }
         nav {
             display: flex;
-            gap: 1.5rem;
-            margin-right: 2rem;
+            gap: 1rem;
         }
         nav a {
             color: #FFFFFF;
@@ -47,8 +46,8 @@
         .banner {
             width: 100%;
             height: auto;
-            max-height: 550px;
-            object-fit: contain;
+            max-height: 400px;
+            object-fit: cover;
             margin-top: 80px;
         }
         .container {
@@ -81,7 +80,6 @@
             margin: 0.5rem 0;
             padding-left: 25px;
             position: relative;
-            text-align: left;
         }
         ul li::before {
             content: '\2713';
@@ -114,6 +112,17 @@
         footer a {
             color: #FFD700;
             text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.4rem;
+            }
+            .banner {
+                max-height: 250px;
+            }
+            nav {
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
