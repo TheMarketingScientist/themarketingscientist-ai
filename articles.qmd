@@ -6,6 +6,7 @@ format: html
 toc: true
 execute: 
   enabled: true
+jupyter: python3  # Ensure Python is used
 ---
 
 # 📚 Welcome to the Articles Section
