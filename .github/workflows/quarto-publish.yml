@@ -32,8 +32,8 @@ jobs:
 
       - name: Set up Git user
         run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
+          git config --global user.email "andres.acosta.escobar@gmail.com"
+          git config --global user.name "TheMarketingScientist"
 
       - name: Clean problematic Git file
         run: rm -rf .git/index.lock || true
