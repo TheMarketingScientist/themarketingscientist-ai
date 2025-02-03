@@ -1,3 +1,6 @@
+### **✅ Corrected Version**
+Make sure your `articles.qmd` file **ends properly** like this:
+```markdown
 ---
 title: "Articles"
 author: "The Marketing Scientist"
@@ -39,4 +42,3 @@ articles = [f for f in os.listdir(articles_path) if f.endswith(".qmd")]
 for article in articles:
     title = article.replace("-", " ").replace(".qmd", "").title()
     print(f"- [{title}](articles/{article.replace('.qmd', '.html')})")
-```
