@@ -1,6 +1,3 @@
-### **✅ Corrected Version**
-Make sure your `articles.qmd` file **ends properly** like this:
-```markdown
 ---
 title: "Articles"
 author: "The Marketing Scientist"
