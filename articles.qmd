@@ -4,7 +4,7 @@ author: "The Marketing Scientist"
 date: today
 format: html
 toc: true
-execute:
+execute: 
   enabled: true
 ---
 
@@ -39,3 +39,4 @@ articles = [f for f in os.listdir(articles_path) if f.endswith(".qmd")]
 for article in articles:
     title = article.replace("-", " ").replace(".qmd", "").title()
     print(f"- [{title}](articles/{article.replace('.qmd', '.html')})")
+```
