@@ -13,13 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-        with:
-          version: "latest"
-
-      - name: Check Quarto Version
-        run: quarto --version
+      - name: Install Quarto Manually
+        run: |
+          wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.552/quarto-1.4.552-linux-amd64.deb
+          sudo dpkg -i quarto-1.4.552-linux-amd64.deb
+          quarto --version
 
       - name: Install Pandoc
         run: sudo apt-get install pandoc -y
