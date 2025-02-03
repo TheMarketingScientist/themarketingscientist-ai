@@ -1,9 +1,13 @@
----
-title: "Welcome to The Marketing Scientist"
-author: "Your Name"
-date: today
----
-
-# Welcome to My Blog
-
-This is my first article on The Marketing Scientist.
+project:
+  type: website
+website:
+  title: "The Marketing Scientist"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: articles.qmd  # Ensure it's here
+        text: Articles
+format:
+  html:
+    theme: cosmo
