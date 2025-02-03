@@ -1,0 +1,10 @@
+---
+title: "My First Article"
+author: "Your Name"
+date: today
+format: html
+---
+
+# Welcome to My First Article
+
+This is my first article!
