@@ -5,7 +5,7 @@ date: today
 format: html
 toc: true
 execute:
-  enabled: false
+  enabled: true
 ---
 
 # 📚 Welcome to the Articles Section
@@ -39,4 +39,3 @@ articles = [f for f in os.listdir(articles_path) if f.endswith(".qmd")]
 for article in articles:
     title = article.replace("-", " ").replace(".qmd", "").title()
     print(f"- [{title}](articles/{article.replace('.qmd', '.html')})")
-
