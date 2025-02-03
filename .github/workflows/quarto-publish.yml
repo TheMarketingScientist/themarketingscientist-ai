@@ -36,3 +36,4 @@ jobs:
       - name: Deploy to GitHub Pages
         if: success()
         run: quarto publish gh-pages
+
