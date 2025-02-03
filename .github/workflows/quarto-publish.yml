@@ -24,8 +24,9 @@ jobs:
 
       - name: Render Quarto Website
         run: |
-          quarto render articles.qmd
           quarto render
+          ls -lah _site  # Debugging step to confirm if articles.html exists
+
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
