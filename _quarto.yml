@@ -6,7 +6,7 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - href: articles.qmd
+      - href: articles.qmd  # Ensure it's listed here
         text: Articles
 format:
   html:
