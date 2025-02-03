@@ -1,4 +1,4 @@
-name: Render Quarto Site
+name: Quarto Publish
 
 on:
   push:
@@ -11,27 +11,28 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Quarto Manually
         run: |
-          wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.552/quarto-1.4.552-linux-amd64.deb
-          sudo dpkg -i quarto-1.4.552-linux-amd64.deb
-          quarto --version
+          wget -qO- https://quarto.org/download/latest/quarto-linux-amd64.deb > quarto.deb
+          sudo dpkg -i quarto.deb
 
       - name: Install Pandoc
-        run: sudo apt-get install pandoc -y
+        run: sudo apt install pandoc -y
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Jupyter and nbformat
+        run: |
+          pip install jupyter nbformat
 
       - name: Render Quarto Website
-        run: |
-          quarto render articles.qmd
-          quarto render
-          ls -lah _site  # Debugging step to check if articles.html exists
-
-
+        run: quarto render articles.qmd
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GH_PAT }}  # Use the new secret token
-          publish_dir: ./_site
+        if: success()
+        run: quarto publish gh-pages
