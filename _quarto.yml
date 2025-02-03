@@ -1,13 +1,19 @@
 project:
   type: website
+
 website:
   title: "The Marketing Scientist"
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - href: articles.qmd
+      - href: articles.html  # Ensure this links correctly to articles.html
         text: Articles
+  search: true  # Enables search functionality
+
 format:
   html:
-    theme: cosmo
+    theme: cosmo  # You can change this theme if needed
+    css: styles.css  # Optional: Custom CSS for styling
+    toc: true  # Adds a table of contents to your articles
+
