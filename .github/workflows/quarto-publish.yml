@@ -15,7 +15,7 @@ jobs:
 
       - name: Install Quarto Manually
         run: |
-          wget -qO- https://quarto.org/download/latest/quarto-linux-amd64.deb > quarto.deb
+          wget -qO quarto.deb https://quarto.org/download/latest/quarto-linux-amd64.deb
           sudo dpkg -i quarto.deb
 
       - name: Install Pandoc
@@ -30,10 +30,14 @@ jobs:
         run: |
           pip install jupyter nbformat
 
-      - name: Set up Git user
+      - name: Set Up Git User
         run: |
-          git config --global user.email "andres.acosta.escobar@gmail.com"
+          git config --global user.email "gtarcademia1@gmail.com"
           git config --global user.name "TheMarketingScientist"
+
+      - name: Authenticate GitHub
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/TheMarketingScientist/themarketingscientist-ai.git
 
       - name: Clean problematic Git file
         run: rm -rf .git/index.lock || true
