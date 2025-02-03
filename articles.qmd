@@ -6,7 +6,7 @@ format: html
 toc: true
 execute: 
   enabled: true
-jupyter: python3  # Ensure Python is used
+jupyter: python3  # Ensures Python execution in Quarto
 ---
 
 # 📚 Welcome to the Articles Section
@@ -30,13 +30,19 @@ Here you’ll find insights on AI, data science, and marketing innovation.
 ```{python}
 import os
 
-# Path to the articles folder
+# Ensure the directory exists
 articles_path = "articles"
+if not os.path.exists(articles_path):
+    print("⚠️ Warning: 'articles' directory not found.")
 
 # Find all .qmd articles
 articles = [f for f in os.listdir(articles_path) if f.endswith(".qmd")]
 
 # Generate links dynamically
-for article in articles:
-    title = article.replace("-", " ").replace(".qmd", "").title()
-    print(f"- [{title}](articles/{article.replace('.qmd', '.html')})")
+if articles:
+    print("\n## 📝 Latest Articles\n")
+    for article in sorted(articles):
+        title = article.replace("-", " ").replace(".qmd", "").title()
+        print(f"- [{title}](articles/{article.replace('.qmd', '.html')})")
+else:
+    print("No articles found.")
