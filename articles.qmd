@@ -1,16 +1,41 @@
-project:
-  type: website
+---
+title: "Articles"
+author: "The Marketing Scientist"
+date: today
+format: html
+toc: true
+number-sections: true
+---
 
-website:
-  title: "The Marketing Scientist"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - href: articles.qmd  # Keep it as .qmd; Quarto will convert it
-        text: Articles
-  page-navigation: true
+# Welcome to the Articles Section
 
-format:
-  html:
-    theme: cosmo
+Here you'll find insights on AI, data science, and marketing innovation.
+
+---
+
+## 🔥 Featured Articles
+
+### 🚀 AI & Marketing Science
+- [Marketing Attribution Models: MMM, MTA, Full Funnel](#)
+- [High-Value Audience Modeling: A Precision Marketing Approach](#)
+- [Customer Journey Analytics: Funnel Analysis & CLV](#)
+
+### 🎯 Data-Driven Strategy
+- [How AI is Transforming Brand Measurement](#)
+- [Geo-Marketing and Localized AI Strategies](#)
+- [Interpretable AI for Business Decision-Making](#)
+
+---
+
+## 📝 Latest Blog Posts
+```{python}
+# Placeholder: In the future, you can generate this dynamically
+posts = [
+    {"title": "AI in Marketing: The Future", "url": "#"},
+    {"title": "Data Science for C-Suite: How to Communicate Value", "url": "#"},
+    {"title": "Customer Segmentation with AI", "url": "#"},
+]
+
+for post in posts:
+    print(f"- [{post['title']}]({post['url']})")
+
