@@ -4,12 +4,12 @@ author: "The Marketing Scientist"
 date: today
 format: html
 toc: true
-execute: 
+execute:
   enabled: true
-jupyter: python3  # Ensures Python execution in Quarto
+jupyter: python3  # ✅ Ensures Python execution in Quarto
 ---
 
-# 📚 Welcome to the Articles Section
+# 📚 Articles  
 
 Here you’ll find insights on AI, data science, and marketing innovation.
 
@@ -28,10 +28,15 @@ Here you’ll find insights on AI, data science, and marketing innovation.
 ## 📌 Latest Blog Posts (Generated Dynamically)
 
 ```{python}
+#| echo: false  # ✅ Hides code output, only rendering results
+#| results: asis  # ✅ Ensures correct Markdown formatting
+
 import os
 
-# Ensure the directory exists
+# Define the path to articles
 articles_path = "articles"
+
+# Ensure the directory exists
 if not os.path.exists(articles_path):
     print("⚠️ Warning: 'articles' directory not found.")
 
@@ -40,9 +45,9 @@ articles = [f for f in os.listdir(articles_path) if f.endswith(".qmd")]
 
 # Generate links dynamically
 if articles:
-    print("\n## 📝 Latest Articles\n")
-    for article in sorted(articles):
+    print("## 📝 Latest Articles\n")  # ✅ Correct Markdown header
+    for article in sorted(articles):  # ✅ Sort articles alphabetically
         title = article.replace("-", " ").replace(".qmd", "").title()
         print(f"- [{title}](articles/{article.replace('.qmd', '.html')})")
 else:
-    print("No articles found.")
+    print("_No articles found._")  # ✅ Ensures no broken output
