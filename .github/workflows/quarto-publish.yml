@@ -30,10 +30,17 @@ jobs:
         run: |
           pip install jupyter nbformat
 
+      - name: Set up Git user
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+
+      - name: Clean problematic Git file
+        run: rm -rf .git/index.lock || true
+
       - name: Render Quarto Website
         run: quarto render articles.qmd
 
       - name: Deploy to GitHub Pages
         if: success()
         run: quarto publish gh-pages
-
