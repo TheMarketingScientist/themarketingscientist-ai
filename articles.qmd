@@ -24,7 +24,7 @@ Here you’ll find insights on AI, data science, and marketing innovation.
 - [Geo-Marketing and Localized AI Strategies](#)
 - [Interpretable AI for Business Decision-Making](#)
 
-## 📝 Latest Blog Posts (Generated Dynamically)
+## 📌 Latest Blog Posts (Generated Dynamically)
 
 ```{python}
 import os
@@ -39,3 +39,4 @@ articles = [f for f in os.listdir(articles_path) if f.endswith(".qmd")]
 for article in articles:
     title = article.replace("-", " ").replace(".qmd", "").title()
     print(f"- [{title}](articles/{article.replace('.qmd', '.html')})")
+
