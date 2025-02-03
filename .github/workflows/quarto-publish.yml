@@ -3,7 +3,7 @@ name: Render Quarto Site
 on:
   push:
     branches:
-      - main  # Runs when you push changes to the main branch
+      - main
 
 jobs:
   build-deploy:
@@ -18,7 +18,10 @@ jobs:
         with:
           version: "latest"
 
-      - name: Install Pandoc (needed for Quarto)
+      - name: Check Quarto Version
+        run: quarto --version
+
+      - name: Install Pandoc
         run: sudo apt-get install pandoc -y
 
       - name: Render Quarto Website
