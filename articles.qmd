@@ -1,0 +1,9 @@
+---
+title: "Welcome to The Marketing Scientist"
+author: "Your Name"
+date: today
+---
+
+# Welcome to My Blog
+
+This is my first article on The Marketing Scientist.
