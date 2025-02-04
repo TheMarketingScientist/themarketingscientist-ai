@@ -1,0 +1,4 @@
+quarto.deb
+.quarto/
+.jupyter_cache/
+_freeze/
