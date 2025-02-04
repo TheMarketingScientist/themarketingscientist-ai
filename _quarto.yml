@@ -23,8 +23,13 @@ format:
 
 execute:
   enabled: true
+  jupyter: python3  # Ensures Python execution in Quarto
   freeze: auto  # Ensures cells are re-run when content changes
   cache: true  # Speeds up rendering by caching outputs
+
+filters:
+  - quarto
+  - jupyter  # Enables Jupyter execution
 
 metadata-files:
   - _authors.yml  # Optional author metadata
@@ -34,3 +39,4 @@ resources:
   - CNAME  # If using a custom domain
 
 editor: visual
+
