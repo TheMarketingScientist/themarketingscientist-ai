@@ -13,22 +13,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Quarto Manually
+      - name: Install Quarto
         run: |
           wget -qO quarto.deb https://quarto.org/download/latest/quarto-linux-amd64.deb
-          sudo dpkg -i quarto.deb || sudo apt-get -f install -y
+          sudo dpkg -i quarto.deb
+          sudo apt-get install -f  # Fix missing dependencies
 
-      - name: Install Pandoc
-        run: sudo apt install pandoc -y
+      - name: Install Dependencies
+        run: sudo apt install pandoc jupyter jupyter-cache -y
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install Jupyter and Dependencies
+      - name: Install Python Dependencies
         run: |
-          pip install jupyter nbformat ipykernel jupyter-cache
+          pip install jupyter nbformat quarto-cli
 
       - name: Set Up Git User
         run: |
@@ -37,20 +38,19 @@ jobs:
 
       - name: Authenticate GitHub
         run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/TheMarketingScientist/themarketingscientist-ai.git
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/TheMarketingScientist/themarketingscientist-ai.git
 
-      - name: Clean problematic Git file
-        run: rm -rf .git/index.lock || true
-
-      - name: Ensure Jupyter Kernel is Installed
-        run: python -m ipykernel install --user
+      - name: Clean problematic Git files
+        run: |
+          rm -rf .git/index.lock || true
+          rm -rf _freeze/ || true  # Removes unnecessary cache files
 
       - name: Render Quarto Website
         run: quarto render
 
       - name: Deploy to GitHub Pages
+        if: success()
         run: |
-          git add .
-          git commit -m "Automated deployment via GitHub Actions"
+          git add -A
+          git commit -m "Deploy Quarto site"
           git push origin main
-          quarto publish gh-pages
