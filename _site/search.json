@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "articles/test-article.html",
+    "href": "articles/test-article.html",
+    "title": "My First Article",
+    "section": "",
+    "text": "Welcome to My First Article\nThis is my first article!"
+  },
+  {
+    "objectID": "articles.html",
+    "href": "articles.html",
+    "title": "Articles",
+    "section": "",
+    "text": "Here you’ll find insights on AI, data science, and marketing innovation.\n\n\n\n\n\nMarketing Attribution Models: MMM, MTA, Full Funnel\nHigh-Value Audience Modeling: A Precision Marketing Approach\nCustomer Journey Analytics: Funnel Analysis & CLV\n\n\n\n\n\nHow AI is Transforming Brand Measurement\nGeo-Marketing and Localized AI Strategies\nInterpretable AI for Business Decision-Making\n\n\n\n\n\n#| echo: false # ✅ Hides code output, only rendering results #| results: asis # ✅ Ensures correct Markdown formatting\nimport os"
+  },
+  {
+    "objectID": "articles.html#featured-articles",
+    "href": "articles.html#featured-articles",
+    "title": "Articles",
+    "section": "",
+    "text": "Marketing Attribution Models: MMM, MTA, Full Funnel\nHigh-Value Audience Modeling: A Precision Marketing Approach\nCustomer Journey Analytics: Funnel Analysis & CLV\n\n\n\n\n\nHow AI is Transforming Brand Measurement\nGeo-Marketing and Localized AI Strategies\nInterpretable AI for Business Decision-Making"
+  },
+  {
+    "objectID": "articles.html#latest-blog-posts-generated-dynamically",
+    "href": "articles.html#latest-blog-posts-generated-dynamically",
+    "title": "Articles",
+    "section": "",
+    "text": "#| echo: false # ✅ Hides code output, only rendering results #| results: asis # ✅ Ensures correct Markdown formatting\nimport os"
+  }
+]
