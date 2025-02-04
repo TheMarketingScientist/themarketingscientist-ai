@@ -1,0 +1,53 @@
+---
+title: "Articles"
+author: "The Marketing Scientist"
+date: today
+format: html
+toc: true
+execute:
+  enabled: true
+jupyter: python3  # ✅ Ensures Python execution in Quarto
+---
+
+# 📚 Articles  
+
+Here you’ll find insights on AI, data science, and marketing innovation.
+
+## 🔥 Featured Articles
+
+### 🚀 AI & Marketing Science
+- [Marketing Attribution Models: MMM, MTA, Full Funnel](#)
+- [High-Value Audience Modeling: A Precision Marketing Approach](#)
+- [Customer Journey Analytics: Funnel Analysis & CLV](#)
+
+### 🎯 Data-Driven Strategy
+- [How AI is Transforming Brand Measurement](#)
+- [Geo-Marketing and Localized AI Strategies](#)
+- [Interpretable AI for Business Decision-Making](#)
+
+## 📌 Latest Blog Posts (Generated Dynamically)
+
+```{python}
+#| echo: false  # ✅ Hides code output, only rendering results
+#| results: asis  # ✅ Ensures correct Markdown formatting
+
+import os
+
+# Define the path to articles
+articles_path = "articles"
+
+# Ensure the directory exists
+if not os.path.exists(articles_path):
+    print("⚠️ Warning: 'articles' directory not found.")
+
+# Find all .qmd articles
+articles = [f for f in os.listdir(articles_path) if f.endswith(".qmd")]
+
+# Generate links dynamically
+if articles:
+    print("## 📝 Latest Articles\n")  # ✅ Correct Markdown header
+    for article in sorted(articles):  # ✅ Sort articles alphabetically
+        title = article.replace("-", " ").replace(".qmd", "").title()
+        print(f"- [{title}](articles/{article.replace('.qmd', '.html')})")
+else:
+    print("_No articles found._")  # ✅ Ensures no broken output
