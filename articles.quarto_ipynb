@@ -61,15 +61,14 @@
         "else:\n",
         "    print(\"_No articles found._\")  # ✅ Ensures no broken output"
       ],
-      "id": "7f69105e"
+      "id": "1c3ef653"
     }
   ],
   "metadata": {
     "kernelspec": {
-      "name": "python3",
+      "display_name": "Python 3",
       "language": "python",
-      "display_name": "Python 3 (ipykernel)",
-      "path": "/opt/hostedtoolcache/Python/3.10.16/x64/share/jupyter/kernels/python3"
+      "name": "python3"
     }
   },
   "nbformat": 4,
