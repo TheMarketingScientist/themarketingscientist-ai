@@ -21,19 +21,23 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo apt install pandoc -y
+          sudo apt update
+          sudo apt install -y pandoc
           pip install --upgrade pip
-          pip install jupyter jupyter-cache nbformat
-
+          pip install jupyter jupyter-cache nbformat quarto-cli
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install Python Dependencies
+      - name: Debug Jupyter Installation
         run: |
-          pip install jupyter nbformat quarto-cli
+          jupyter --version
+          jupyter kernelspec list  # Debugging: Check if the kernel is installed
+
+      - name: Render Quarto Website
+        run: quarto render
 
       - name: Set Up Git User
         run: |
@@ -48,9 +52,6 @@ jobs:
         run: |
           rm -rf .git/index.lock || true
           rm -rf _freeze/ || true  # Removes unnecessary cache files
-
-      - name: Render Quarto Website
-        run: quarto render
 
       - name: Deploy to GitHub Pages
         if: success()
