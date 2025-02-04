@@ -20,7 +20,9 @@ jobs:
           sudo apt-get install -f  # Fix missing dependencies
 
       - name: Install Dependencies
-        run: sudo apt install pandoc jupyter jupyter-cache -y
+        run: |
+          sudo apt install pandoc -y
+          pip install jupyter jupyter-cache
 
       - name: Set up Python
         uses: actions/setup-python@v4
