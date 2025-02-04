@@ -22,7 +22,9 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt install pandoc -y
-          pip install jupyter jupyter-cache
+          pip install --upgrade pip
+          pip install jupyter jupyter-cache nbformat
+
 
       - name: Set up Python
         uses: actions/setup-python@v4
