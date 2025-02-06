@@ -3,7 +3,7 @@ title: "Audience Modeling Strategies"
 author: "Your Name"
 date: 2025-02-06
 description: "Understanding and implementing effective audience modeling techniques"
-image: ..images/audience-modeling.jpg
+image: ../images/audience-modeling.jpg
 featured: true
 ---
 
