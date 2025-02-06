@@ -1,0 +1,20 @@
+project:
+  output-dir: _site
+  title: "The Marketing Scientist"
+
+format:
+  html:
+    theme: cosmo
+    css: style.css
+    include-in-nav: ["index.qmd", "articles.qmd"]
+    page-layout: article
+    execute:
+      freeze: auto
+      allow-errors: false
+      warning: false
+      message: false
+      echo: false
+      kernel: false  # Disable Jupyter kernel
+
+extra-files:
+  - images/favicon.png
