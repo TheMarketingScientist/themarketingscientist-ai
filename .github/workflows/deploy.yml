@@ -22,9 +22,16 @@ jobs:
           git fetch origin gh-pages
           git checkout gh-pages || git checkout --orphan gh-pages
 
-      - name: Move _site/ contents to root
+      - name: Check if _site exists
         run: |
-          rm -rf *  # Remove existing files in gh-pages to prevent duplication
+          if [ ! -d "_site" ]; then
+            echo "⚠️ _site directory not found. Exiting."
+            exit 0
+          fi
+
+      - name: Move _site contents to root
+        run: |
+          rm -rf *  # Remove existing files in gh-pages
           cp -r _site/* .
           rm -rf _site  # Cleanup _site folder after copying
 
