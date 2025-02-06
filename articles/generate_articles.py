@@ -13,7 +13,6 @@ class ArticleManager:
         self.ARTICLES_DIR = os.path.join(os.path.dirname(__file__), "..", "articles")
         self.IMAGES_DIR = os.path.join(os.path.dirname(__file__), "..", "images")
         self.SITE_DIR = os.path.join(os.path.dirname(__file__), "..", "_site")
-        self.SITE_ARTICLES_DIR = os.path.join(self.SITE_DIR, "articles")
 
     def validate_environment(self) -> bool:
         """Validate required files and directories exist"""
@@ -24,8 +23,6 @@ class ArticleManager:
             os.makedirs(self.ARTICLES_DIR)
         if not os.path.exists(self.IMAGES_DIR):
             os.makedirs(self.IMAGES_DIR)
-        if not os.path.exists(self.SITE_ARTICLES_DIR):
-            os.makedirs(self.SITE_ARTICLES_DIR)
         return True
 
     def get_article_metadata(self, file_path: str) -> Dict:
@@ -105,16 +102,11 @@ class ArticleManager:
             os.system("quarto render --no-execute")
             print("✅ Quarto rendering completed!")
 
-            # Ensure articles.html is placed in both locations
+            # Ensure articles.html is ONLY placed in _site/
             site_articles_path = os.path.join(self.SITE_DIR, "articles.html")
-            target_articles_path = os.path.join(self.ARTICLES_DIR, "articles.html")
-            site_articles_folder_path = os.path.join(self.SITE_ARTICLES_DIR, "articles.html")
 
             if os.path.exists(site_articles_path):
-                shutil.copy(site_articles_path, target_articles_path)
-                shutil.copy(site_articles_path, site_articles_folder_path)
-                print("✅ Copied articles.html to both articles/ and _site/articles/")
-
+                print("✅ articles.html is correctly generated in _site/")
             else:
                 print("⚠️ Error: articles.html was not found in _site/")
 
@@ -132,6 +124,7 @@ class ArticleManager:
 if __name__ == "__main__":
     manager = ArticleManager()
     manager.process_articles()
+
 
 
 
