@@ -14,10 +14,24 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _site  # Deploy pre-rendered Quarto site
-          publish_branch: gh-pages  # ✅ Change to 'gh-pages' instead of 'GH_Pages'
+          fetch-depth: 0  # Ensures full git history for branch switching
+
+      - name: Switch to gh-pages branch
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages || git checkout --orphan gh-pages
+
+      - name: Move _site/ contents to root
+        run: |
+          rm -rf *  # Remove existing files in gh-pages to prevent duplication
+          cp -r _site/* .
+          rm -rf _site  # Cleanup _site folder after copying
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git commit -m "Automated deployment from GH_Pages to gh-pages" || echo "No changes to commit"
+          git push origin gh-pages
