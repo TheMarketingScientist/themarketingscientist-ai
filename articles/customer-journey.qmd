@@ -1,0 +1,13 @@
+---
+title: "Customer Journey Mapping Guide"
+author: "Your Name"
+date: 2025-02-06
+description: "Creating effective customer journey maps"
+image: images/customer-journey.jpg
+featured: true
+---
+
+# Customer Journey Mapping Guide
+
+Your article content here...
+

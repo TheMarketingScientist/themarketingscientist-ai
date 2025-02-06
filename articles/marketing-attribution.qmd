@@ -1,0 +1,12 @@
+---
+title: "Marketing Attribution Models Explained"
+author: "Your Name"
+date: 2025-02-06
+description: "Understanding marketing attribution models"
+image: images/marketing-attribution.jpg
+featured: true
+---
+
+# Marketing Attribution Models Explained
+
+Your article content here...
