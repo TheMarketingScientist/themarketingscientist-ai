@@ -18,3 +18,11 @@ format:
 
 extra-files:
   - images/favicon.png
+
+website:
+  title: "The Marketing Scientist"
+  navbar:
+    left:
+      
+      - href: articles.qmd
+        text: Articles
