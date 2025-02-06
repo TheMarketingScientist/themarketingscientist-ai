@@ -3,25 +3,39 @@ name: Deploy Quarto Site
 on:
   push:
     branches:
-      - GH_Pages  # Change if your branch is different
+      - GH_Pages
 
 jobs:
-  deploy:
+  build-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Quarto
+      - name: Install Quarto
         run: |
           wget -qO quarto.deb https://quarto.org/download/latest/quarto-linux-amd64.deb
           sudo dpkg -i quarto.deb
+          sudo apt-get install -f  # Fix missing dependencies
+
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y pandoc
+          pip install --upgrade pip
+          pip install jupyter jupyter-cache nbformat quarto-cli
 
       - name: Render Quarto Site
         run: quarto render
 
+      - name: Move Generated Site to Root
+        run: |
+          mv _site/* .
+          rm -rf _site
+
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site  # Deploy the _site folder
+          branch: GH_Pages
+          folder: .
