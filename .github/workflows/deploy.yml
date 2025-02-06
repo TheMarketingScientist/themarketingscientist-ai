@@ -25,14 +25,14 @@ jobs:
       - name: Check if _site exists
         run: |
           if [ ! -d "_site" ]; then
-            echo "⚠️ _site directory not found. Exiting."
+            echo "⚠️ _site directory not found. Skipping deployment."
             exit 0
           fi
 
       - name: Move _site contents to root
         run: |
           rm -rf *  # Remove existing files in gh-pages
-          cp -r _site/* .
+          cp -r _site/* . || echo "⚠️ _site is empty, nothing to copy"
           rm -rf _site  # Cleanup _site folder after copying
 
       - name: Commit and push changes
