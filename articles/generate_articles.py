@@ -13,9 +13,9 @@ class ArticleManager:
         self.ARTICLES_DIR = os.path.join(os.path.dirname(__file__), "..", "articles")
         self.IMAGES_DIR = os.path.join(os.path.dirname(__file__), "..", "images")
         self.SITE_DIR = os.path.join(os.path.dirname(__file__), "..", "_site")
+        self.SITE_ARTICLES_DIR = os.path.join(self.SITE_DIR, "articles")
 
     def validate_environment(self) -> bool:
-        """Validate required files and directories exist"""
         if not os.path.exists(self.ARTICLES_QMD_PATH):
             print(f"⚠️ Error: '{self.ARTICLES_QMD_PATH}' not found.")
             return False
@@ -26,7 +26,6 @@ class ArticleManager:
         return True
 
     def get_article_metadata(self, file_path: str) -> Dict:
-        """Extract metadata from article file"""
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
         try:
@@ -41,7 +40,6 @@ class ArticleManager:
             return {}
 
     def generate_featured_articles(self) -> str:
-        """Generate HTML for featured articles section"""
         featured_html = """
         <div class="featured-articles-container">
             <div class="featured-articles-header">
@@ -81,8 +79,13 @@ class ArticleManager:
         """
         return featured_html
 
+    def clean_old_articles(self):
+        if os.path.exists(self.SITE_ARTICLES_DIR):
+            shutil.rmtree(self.SITE_ARTICLES_DIR)
+            os.makedirs(self.SITE_ARTICLES_DIR)
+            print("✅ Cleaned old articles from _site/articles/")
+
     def process_articles(self):
-        """Main processing function"""
         if not self.validate_environment():
             return
         try:
@@ -99,10 +102,11 @@ class ArticleManager:
                 file.write(new_content)
             print("✅ Placeholders replaced successfully in articles.qmd!")
             
+            self.clean_old_articles()
+            
             os.system("quarto render --no-execute")
             print("✅ Quarto rendering completed!")
 
-            # Ensure articles.html is ONLY placed in _site/
             site_articles_path = os.path.join(self.SITE_DIR, "articles.html")
 
             if os.path.exists(site_articles_path):
@@ -124,6 +128,7 @@ class ArticleManager:
 if __name__ == "__main__":
     manager = ArticleManager()
     manager.process_articles()
+
 
 
 
