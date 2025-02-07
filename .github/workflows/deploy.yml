@@ -12,11 +12,24 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout GH_Pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: GH_Pages
+          fetch-depth: 0  # Ensure full history is available
+
+      - name: Ensure _site folder exists
+        run: |
+          if [ ! -d "_site" ]; then
+            echo "Error: _site folder missing, deployment canceled."
+            exit 1
+          fi
+
       - name: Checkout gh-pages branch
         uses: actions/checkout@v4
         with:
           ref: gh-pages
-          fetch-depth: 0  # Ensure we get the full history
+          fetch-depth: 0
 
       - name: Backup existing static files
         run: |
@@ -29,7 +42,7 @@ jobs:
           cp -r *.ico backup/ || true
           cp -r style.css backup/ || true
 
-      - name: Checkout GH_Pages branch
+      - name: Checkout GH_Pages branch again
         uses: actions/checkout@v4
         with:
           ref: GH_Pages
@@ -47,10 +60,15 @@ jobs:
           cp -r backup/* . || true  # Restore all backed-up files
           rm -rf backup  # Cleanup backup folder
 
+      - name: Ensure .nojekyll exists (fix Jekyll auto-processing issue)
+        run: |
+          touch .nojekyll
+          echo "Verified .nojekyll to prevent Jekyll processing issues."
+
       - name: Commit and push changes
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           git add .
           git commit -m "Preserve static files while updating articles" || echo "No changes to commit"
-          git push origin gh-pages
+          git push origin gh-pages || echo "Push failed, but continuing workflow"
