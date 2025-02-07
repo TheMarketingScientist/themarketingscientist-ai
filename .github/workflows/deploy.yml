@@ -47,13 +47,18 @@ jobs:
         with:
           ref: GH_Pages
 
+      - name: Clean old articles before deploying
+        run: |
+          rm -rf articles  # Remove only the articles folder in gh-pages
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _site  # Deploys the pre-rendered site
+          publish_dir: _site
           publish_branch: gh-pages
-          keep_files: true  # Keeps existing files instead of wiping everything
+          keep_files: true  # Keeps your home page and other files
+
 
       - name: Restore preserved static files
         run: |
