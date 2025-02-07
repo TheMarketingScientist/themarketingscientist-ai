@@ -43,7 +43,7 @@ class ArticleManager:
         featured_html = """
         <div class="featured-articles-container">
             <div class="featured-articles-header">
-                <h2 class="featured-articles-title">🔥 Featured Articles</h2>
+                <h2 class="featured-articles-title"> Featured Articles</h2>
             </div>
             <div class="featured-articles">
         """
@@ -122,8 +122,8 @@ class ArticleManager:
             return
         finally:
             if os.path.exists(self.ARTICLES_QMD_BACKUP):
-                os.remove(self.ARTICLES_QMD_BACKUP)
-                print("✅ Backup file removed")
+                shutil.move(self.ARTICLES_QMD_BACKUP, self.ARTICLES_QMD_PATH)
+                print("✅ Restored original articles.qmd after rendering")
 
 if __name__ == "__main__":
     manager = ArticleManager()
