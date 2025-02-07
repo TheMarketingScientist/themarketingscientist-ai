@@ -3,7 +3,7 @@ name: Deploy Quarto Site
 on:
   push:
     branches:
-      - GH_Pages  # Trigger deployment when changes are pushed to GH_Pages
+      - GH_Pages  # Runs when you push to GH_Pages
 
 permissions:
   contents: write
@@ -12,33 +12,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout GH_Pages branch
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensures full git history for branch switching
+          ref: GH_Pages
 
-      - name: Switch to gh-pages branch
-        run: |
-          git fetch origin gh-pages
-          git checkout gh-pages || git checkout --orphan gh-pages
-
-      - name: Check if _site exists
-        run: |
-          if [ ! -d "_site" ]; then
-            echo "⚠️ _site directory not found. Skipping deployment."
-            exit 0
-          fi
-
-      - name: Move _site contents to root
-        run: |
-          rm -rf *  # Remove existing files in gh-pages
-          cp -r _site/* . || echo "⚠️ _site is empty, nothing to copy"
-          rm -rf _site  # Cleanup _site folder after copying
-
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add .
-          git commit -m "Automated deployment from GH_Pages to gh-pages" || echo "No changes to commit"
-          git push origin gh-pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _site  # Deploys the pre-rendered site
+          publish_branch: gh-pages
