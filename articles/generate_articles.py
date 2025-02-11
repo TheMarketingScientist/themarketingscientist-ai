@@ -1,6 +1,7 @@
 import os
 import shutil
 import yaml
+import re
 from datetime import datetime
 from typing import Dict, List
 
@@ -39,6 +40,9 @@ class ArticleManager:
             print(f"⚠️ Error parsing metadata in {file_path}: {str(e)}")
             return {}
 
+    def slugify(self, text: str) -> str:
+        return re.sub(r'[^a-zA-Z0-9-]', '', text.replace(' ', '-')).lower()
+
     def generate_featured_articles(self) -> str:
         featured_html = """
         <div class="featured-articles-container">
@@ -52,7 +56,7 @@ class ArticleManager:
             if file.endswith('.qmd'):
                 metadata = self.get_article_metadata(os.path.join(self.ARTICLES_DIR, file))
                 if metadata and 'title' in metadata and metadata.get('title', '').strip() and metadata.get('featured', False):
-                    metadata['filename'] = os.path.splitext(file)[0]  # Ensure correct filename
+                    metadata['filename'] = self.slugify(os.path.splitext(file)[0])  # Ensure clean filename
                     featured_articles.append(metadata)
 
         featured_articles.sort(key=lambda x: str(x.get('date', '')), reverse=True)
@@ -129,12 +133,6 @@ class ArticleManager:
 if __name__ == "__main__":
     manager = ArticleManager()
     manager.process_articles()
-
-
-
-
-
-
 
 
 
