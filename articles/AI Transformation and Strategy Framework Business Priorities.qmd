@@ -1,5 +1,5 @@
 ---
-title: "<br><br><br>The pillars of AI Strategy and Transformation<br> Part 1: Business Priorities<br><br>"
+title: "<br><br><br><br>The pillars of AI Strategy and Transformation<br> Part 1: Business Priorities<br><br>"
 author: Andres Acosta
 date: 2025-02-10
 image: ../images/business-priorities.png
@@ -147,7 +147,7 @@ A regular review and adaptation of approach ensures alignment with changing mark
 ```{=html}
 <div class="connect-section">
   <div class="linkedin-button">
-    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://www.linkedin.com/in/themarketingscientist" target="_blank">
+    <a href="https://www.linkedin.com/in/themarketingscientist" target="_blank">
       <i class="bi bi-linkedin"></i>
       The Marketing Scientist
     </a>
