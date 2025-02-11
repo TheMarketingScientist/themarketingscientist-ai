@@ -52,6 +52,7 @@ class ArticleManager:
             if file.endswith('.qmd'):
                 metadata = self.get_article_metadata(os.path.join(self.ARTICLES_DIR, file))
                 if metadata and 'title' in metadata and metadata.get('title', '').strip() and metadata.get('featured', False):
+                    metadata['filename'] = os.path.splitext(file)[0]  # Ensure correct filename
                     featured_articles.append(metadata)
 
         featured_articles.sort(key=lambda x: str(x.get('date', '')), reverse=True)
@@ -65,7 +66,7 @@ class ArticleManager:
                 <img src="{image}" alt="{article.get('title', '')}"
                      onerror="this.style.display='none'">
                 <div class="article-content">
-                    <h3><a href="{article.get('filename', '')}.html">
+                    <h3><a href="articles/{article.get('filename', '')}.html">
                         {article.get('title', '')}
                     </a></h3>
                     <p>{article.get('description', '')}</p>
@@ -128,6 +129,7 @@ class ArticleManager:
 if __name__ == "__main__":
     manager = ArticleManager()
     manager.process_articles()
+
 
 
 
