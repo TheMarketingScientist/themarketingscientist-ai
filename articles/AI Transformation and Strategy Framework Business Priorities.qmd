@@ -1,5 +1,5 @@
 ---
-title: "<br><br><br><br>The pillars of AI Strategy and Transformation<br> Part 1: Business Priorities<br><br>"
+title: "<br><br><br><br><br><br>The pillars of AI Strategy and Transformation<br> Part 1: Business Priorities<br><br>"
 author: Andres Acosta
 date: 2025-02-10
 image: ../images/business-priorities.png
