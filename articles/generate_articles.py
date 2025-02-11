@@ -70,8 +70,8 @@ class ArticleManager:
                 <img src="{image}" alt="{article.get('title', '')}"
                      onerror="this.style.display='none'">
                 <div class="article-content">
-                    <h3><a href="articles/{article.get('filename', '')}.html">
-                        {article.get('title', '')}
+                    <h3><a href="articles/{article['filename']}.html">
+                    {article.get('title', '')}
                     </a></h3>
                     <p>{article.get('description', '')}</p>
                 </div>
