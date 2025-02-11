@@ -56,7 +56,7 @@ class ArticleManager:
             if file.endswith('.qmd'):
                 metadata = self.get_article_metadata(os.path.join(self.ARTICLES_DIR, file))
                 if metadata and 'title' in metadata and metadata.get('title', '').strip() and metadata.get('featured', False):
-                    metadata['filename'] = self.slugify(os.path.splitext(file)[0])  # Ensure clean filename
+                    metadata['filename'] = self.slugify(metadata.get('title', ''))
                     featured_articles.append(metadata)
 
         featured_articles.sort(key=lambda x: str(x.get('date', '')), reverse=True)
