@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Andres Acosta">
+<meta name="dcterms.date" content="2025-02-20">
+<meta name="description" content="The Next Generation AI for Customer Segmentation">
 
-<title>Enjoy your read!</title>
+<title> The undiscovered transitional species in Marketing Deep Learning!   Part 1: Autoencoders </title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,19 +26,20 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="articles_files/libs/clipboard/clipboard.min.js"></script>
-<script src="articles_files/libs/quarto-html/quarto.js"></script>
-<script src="articles_files/libs/quarto-html/popper.min.js"></script>
-<script src="articles_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="articles_files/libs/quarto-html/anchor.min.js"></script>
-<link href="articles_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="articles_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="articles_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="articles_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="articles_files/libs/bootstrap/bootstrap-a1ff8711b79ae3724c050874b28d9907.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="autoencoders_files/libs/clipboard/clipboard.min.js"></script>
+<script src="autoencoders_files/libs/quarto-html/quarto.js"></script>
+<script src="autoencoders_files/libs/quarto-html/popper.min.js"></script>
+<script src="autoencoders_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="autoencoders_files/libs/quarto-html/anchor.min.js"></script>
+<link href="autoencoders_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="autoencoders_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="autoencoders_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="autoencoders_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="autoencoders_files/libs/bootstrap/bootstrap-a1ff8711b79ae3724c050874b28d9907.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../article.css">
 </head>
 
 <body class="fullcontent">
@@ -46,14 +50,31 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Enjoy your read!</h1>
+<h1 class="title"><br><br><br><br><br><br>The undiscovered transitional species in Marketing Deep Learning! <br> Part 1: Autoencoders<br><br></h1>
 </div>
 
+<div>
+  <div class="description">
+    The Next Generation AI for Customer Segmentation
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Andres Acosta </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 20, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -63,46 +84,100 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<header class="site-header">
-    <h1 class="site-title">The Marketing Scientist</h1>
-    <nav class="site-nav">
-        <a href="index.html" class="nav-link">🏠 Home</a>
-        <a href="articles.html" class="nav-link">📚 Articles</a>
-    </nav>
-</header>
-
-<div class="featured-articles">
-    
-        <div class="featured-articles-container">
-            <div class="featured-articles-header">
-                <h2 class="featured-articles-title anchored"> Featured Articles</h2>
-            </div>
-            <div class="featured-articles">
-        
-            <article class="article featured">
-                <img src="../images/autoencoders.png" alt="<br><br><br><br><br><br>The undiscovered transitional species in Marketing Deep Learning! <br> Part 1: Autoencoders<br><br>" onerror="this.style.display='none'">
-                <div class="article-content">
-                    <h3 class="anchored"><a href="articles/autoencoders.html">
-                    <br><br><br><br><br><br>The undiscovered transitional species in Marketing Deep Learning! <br> Part 1: Autoencoders<br><br>
-                    </a></h3>
-                    <p>The Next Generation AI for Customer Segmentation</p>
-                </div>
-            </article>
-            
-            <article class="article featured">
-                <img src="../images/business-priorities.png" alt="<br><br><br><br><br><br>The pillars of AI Strategy and Transformation<br> Part 1: Business Priorities<br><br>" onerror="this.style.display='none'">
-                <div class="article-content">
-                    <h3 class="anchored"><a href="articles/ai-transformation-strategy-framework-business-priorities.html">
-                    <br><br><br><br><br><br>The pillars of AI Strategy and Transformation<br> Part 1: Business Priorities<br><br>
-                    </a></h3>
-                    <p>We start by diving into one of the most important pillars of a successful AI Strategy.</p>
-                </div>
-            </article>
-            
-            </div>
-        </div>
-        
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The industry has largely ignored <strong>unsupervised deep learning</strong>: Advertising Holdings have spent their time and resources trying to fix a broken narrative against their measurement bias. On the other hand, Marketing AI boutiques have been created into Generative AI and consultancy firms went from supervised learning directly to Generative AI. The <strong>Undiscovered Transitional Species Saga</strong> aims to explore and defend the business case for Marketing Deep Learning models completely ignored in the industry.</p>
+<p>Autoencoders bring power to recommendations, segmentation and customer journeys. Autoencoders can be considered as a form of <strong>Representation Learning</strong>, they offer advnanced creative applications and interpretability is used and selected correctly.</p>
+<p>What are the symptoms of ignoing Autoencoders?<br>
+🚫 Suboptimal recommendation systems<br>
+🚫 Weak customer segmentation<br>
+🚫 Inefficient creative optimization</p>
+<p>Autoencoders bridge these gaps.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/autoencoder-diagram.png" class="img-fluid figure-img"></p>
+<figcaption>Autoencoder model architecture</figcaption>
+</figure>
 </div>
+<hr>
+</section>
+<section id="why-autoencoders-matter-for-marketing-ai" class="level1">
+<h1>Why Autoencoders Matter for Marketing AI</h1>
+<p>Traditional <strong>Marketing AI</strong> models rely heavily on labeled data.<br>
+- Churn models - CLV predictions<br>
+- Attribution - Audience and Creative Optimization - Pretty much everything!</p>
+<p>However, <strong>customer behavior is complex and unlabeled</strong>. Autoencoders learn <strong>latent representations</strong> that reveal <strong>deep behavioral patterns</strong> beyond surface-level features.</p>
+<hr>
+</section>
+<section id="marketing-use-cases-for-autoencoders" class="level1">
+<h1>Marketing Use Cases for Autoencoders</h1>
+<section id="sparse-autoencoders-interpretable-customer-segmentation" class="level2">
+<h2 class="anchored" data-anchor-id="sparse-autoencoders-interpretable-customer-segmentation">1. Sparse Autoencoders → Interpretable Customer Segmentation</h2>
+<blockquote class="blockquote">
+<p>The Objective: Transform high-dimensional behavioral data (e.g., purchase history, browsing patterns, app usage) into human-interpretable customer segments using sparse autoencoders (SAEs), which enforce sparsity in latent representations to uncover distinct, non-overlapping patterns.</p>
+</blockquote>
+<p><strong>How It Works?</strong></p>
+<p><strong>Sparse Autoencoders (SAEs)</strong> are neural networks trained to reconstruct input data through a compressed latent layer. A sparsity constraint (e.g., L1 regularization or KL divergence) ensures only a small subset of neurons activate for any input, forcing the model to encode data into disentangled features (e.g., “budget shopper,” “premium loyalist”, “impulse buyer”, etc..).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/behavior.jpg" class="img-fluid figure-img"></p>
+<figcaption>SAEs: the next generatio AI for customer behavior and segmentation</figcaption>
+</figure>
+</div>
+<p><strong>Behavioral Data Compression:</strong> Input: High-dimensional data (e.g., transaction frequency, product affinity, session duration). Latent Space: Each active neuron in the sparse layer represents a prototypical customer trait (e.g., “responds to discounts”, “nighttime app user”).</p>
+<p><strong>Segment Identification:</strong> Cluster latent codes (sparse vectors) to group customers with similar activation patterns. Unlike traditional clustering (e.g., k-means), <strong>SAEs</strong> automatically learn meaningful axes of variation, removing reliance on manual feature engineering.</p>
+</section>
+<section id="vaes-variational-autoencoders-brand-attributes-style-for-ad-creatives-branding" class="level2">
+<h2 class="anchored" data-anchor-id="vaes-variational-autoencoders-brand-attributes-style-for-ad-creatives-branding">2. VAEs (Variational Autoencoders) → Brand Attributes Style for Ad Creatives &amp; Branding</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/vaes.png" class="img-fluid figure-img"></p>
+<figcaption>Variational Autoencoders: Capture visual patterns and reproduce brand style</figcaption>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p>Variational Autoencoders (VAEs) represent a sophisticated approach to brand-aligned visual generation, offering a structured methodology for creating cohesive ad creatives and maintaining brand identity. Unlike traditional autoencoders, VAEs treat data representations as probabilistic distributions, allowing for controlled variation in generated assets, enforcing brand consistency.</p>
+</blockquote>
+<p>The power of VAEs lies in their ability to learn continuous, structured representations of visual styles. Rather than memorizing specific designs, they capture the underlying patterns and distributions that define brand aesthetics. This is achieved through:</p>
+<p><strong>- Probabilistic Encoding</strong></p>
+<ul>
+<li>Maps input images to probability distributions</li>
+<li>Enables smooth transitions between styles</li>
+<li>Controls variation in outputs.</li>
+</ul>
+<p><strong>- Structured Latent Space</strong></p>
+<ul>
+<li>Organizes style elements systematically</li>
+<li>Separates independent design factors</li>
+<li>Enables targeted modifications</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="why-agencies-boutiqes-firms-have-skipped-this-opportunity" class="level1">
+<h1>Why Agencies, Boutiqes &amp; Firms Have Skipped This Opportunity</h1>
+<p>🚧 Rule-based heuristics &amp; simple ML models dominate<br>
+🚧 <strong>Lack of data engineering infrastructure for deep learning</strong><br>
+🚧 Fear of “black box” models. These are unjustified, see my coming article saga on Interpretability.</p>
+<p>Many companies prefer the <strong>status quo</strong>, but it’s holding them back.</p>
+<hr>
+</section>
+<section id="the-future-of-autoencoders-in-marketing-ai" class="level1">
+<h1>The Future of Autoencoders in Marketing AI</h1>
+<p>✅ Brands must invest in <strong>scalable AI platforms</strong> like <strong>Vertex AI, SageMaker, and Databricks</strong><br>
+✅ Agencies should shift from <strong>outdated segmentation</strong> to <strong>representation learning</strong><br>
+✅ AI practitioners must bridge the gap between <strong>deep learning &amp; marketing intelligence</strong></p>
+<p>The future of <strong>Marketing AI</strong> can’t only be more predictive modeling. It’s high time we move to <strong>unsupervised &amp; generative</strong>.</p>
+<hr>
+<div class="connect-section">
+  <div class="linkedin-button">
+    <a href="https://www.linkedin.com/in/themarketingscientist" target="_blank">
+      <i class="bi bi-linkedin"></i>
+      The Marketing Scientist
+    </a>
+  </div>
+</div>
+</section>
 
 </main>
 <!-- /main column -->
