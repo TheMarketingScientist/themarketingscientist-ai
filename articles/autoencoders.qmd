@@ -48,6 +48,7 @@ Autoencoders bridge these gaps.
 
 ![Autoencoder model architecture](../images/autoencoder-diagram.png)
 
+
 ---
 
 
@@ -61,6 +62,7 @@ Traditional **Marketing AI** models rely heavily on labeled data.
 - Pretty much everything!  
 
 However, **customer behavior is complex and unlabeled**. Autoencoders learn **latent representations** that reveal **deep behavioral patterns** beyond surface-level features.
+
 
 ---
 
@@ -105,6 +107,7 @@ The power of VAEs lies in their ability to learn continuous, structured represen
 - Separates independent design factors
 - Enables targeted modifications
 
+
 ---
 
 
@@ -115,6 +118,7 @@ The power of VAEs lies in their ability to learn continuous, structured represen
 🚧 Fear of "black box" models. These are unjustified, see my coming article saga on Interpretability.  
 
 Many companies prefer the **status quo**, but it’s holding them back.
+
 
 ---
 
