@@ -32,6 +32,7 @@ execute:
 </header>
 ```
 
+
 # Introduction
 
 The industry has largely ignored **unsupervised deep learning**: Advertising Holdings have spent their time and resources trying to fix a broken narrative against their measurement bias. On the other hand, Marketing AI boutiques have been created into Generative AI and consultancy firms went from supervised learning directly to Generative AI. The **Undiscovered Transitional Species Saga** aims to explore and defend the business case for Marketing Deep Learning models completely ignored in the industry.  
@@ -49,6 +50,7 @@ Autoencoders bridge these gaps.
 
 ---
 
+
 # Why Autoencoders Matter for Marketing AI
 
 Traditional **Marketing AI** models rely heavily on labeled data.  
@@ -62,6 +64,7 @@ However, **customer behavior is complex and unlabeled**. Autoencoders learn **la
 
 ---
 
+
 # Marketing Use Cases for Autoencoders
 
 ## 1. Sparse Autoencoders → Interpretable Customer Segmentation  
@@ -71,7 +74,7 @@ However, **customer behavior is complex and unlabeled**. Autoencoders learn **la
 
 **Sparse Autoencoders (SAEs)** are neural networks trained to reconstruct input data through a compressed latent layer. A sparsity constraint (e.g., L1 regularization or KL divergence) ensures only a small subset of neurons activate for any input, forcing the model to encode data into disentangled features (e.g., "budget shopper," "premium loyalist", "impulse buyer", etc..).
 
- ![SAEs: the next generatio AI for customer behavior and segmentation](../images/behavior.jpg)
+ ![SAEs: the next generation AI for customer behavior and segmentation](../images/behavior.jpg)
 
 **Behavioral Data Compression:**
 Input: High-dimensional data (e.g., transaction frequency, product affinity, session duration).
@@ -104,6 +107,7 @@ The power of VAEs lies in their ability to learn continuous, structured represen
 
 ---
 
+
 # Why Agencies, Boutiqes & Firms Have Skipped This Opportunity
 
 🚧 Rule-based heuristics & simple ML models dominate  
@@ -113,6 +117,7 @@ The power of VAEs lies in their ability to learn continuous, structured represen
 Many companies prefer the **status quo**, but it’s holding them back.
 
 ---
+
 
 # The Future of Autoencoders in Marketing AI
 
