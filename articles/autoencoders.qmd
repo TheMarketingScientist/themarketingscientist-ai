@@ -35,9 +35,9 @@ execute:
 
 # Introduction
 
-The marketing and advertising industry has largely ignored **unsupervised deep learning**   
+The marketing and advertising industry has largely ignored **unsupervised deep learning**:     
 
-Advertising holdings have spent their time and resources trying to fix a broken narrative against their measurement bias with linear regressions. On the other hand, Marketing AI boutiques have been created in the same era of Generative AI and consultancy firms went from supervised learning directly to Generative AI. 
+Advertising holdings have invested their resources fixing a broken narrative against their measurement bias with linear regressions. On the other hand, Marketing AI boutiques have been created in the same era of Generative AI and consultancy firms went from supervised learning directly to Generative AI. 
 
 This **Undiscovered Transitional Species Saga** aims to explore and defend the business case for Marketing Deep Learning models skipped in the abnormal AI Maturity progression that hype and salesy overcommitment has put us in.  
 
