@@ -35,9 +35,11 @@ execute:
 
 # Introduction
 
-The marketing and advertising industry has largely ignored **unsupervised deep learning**: Advertising Holdings have spent their time and resources trying to fix a broken narrative against their measurement bias with increasingly useless linear regressions. On the other hand, Marketing AI boutiques have been created with Generative AI and consultancy firms went from supervised learning directly to Generative AI. 
+The marketing and advertising industry has largely ignored **unsupervised deep learning**   
 
-The **Undiscovered Transitional Species Saga** aims to explore and defend the business case for Marketing Deep Learning models that were skipped in the abnormal AI Maturity progression that hype and salesy overcommitment has put us in.  
+Advertising holdings have spent their time and resources trying to fix a broken narrative against their measurement bias with linear regressions. On the other hand, Marketing AI boutiques have been created in the same era of Generative AI and consultancy firms went from supervised learning directly to Generative AI. 
+
+This **Undiscovered Transitional Species Saga** aims to explore and defend the business case for Marketing Deep Learning models skipped in the abnormal AI Maturity progression that hype and salesy overcommitment has put us in.  
 
 Autoencoders significantly improve recommendations, segmentation and customer journeys. Autoencoders are a form of **Representation Learning**, they offer advanced creative applications and considerable interpretability if correctly set up.
 
