@@ -41,10 +41,11 @@ The **Undiscovered Transitional Species Saga** aims to explore and defend the bu
 
 Autoencoders significantly improve recommendations, segmentation and customer journeys. Autoencoders are a form of **Representation Learning**, they offer advanced creative applications and considerable interpretability if correctly setup.
 
-What are the symptoms of ignoring Autoencoders?  
-- 🚫 Low Performance from recommendation and cross-selling engines.
-- 🚫 Inconsistent customer segmentation.  
-- 🚫 Insufficient creative performance improvements.  
+What are the symptoms of ignoring Autoencoders?
+
+- ❌ Low Performance from recommendation and cross-selling engines.
+- ❌ Inconsistent customer segmentation.
+- ❌ Insufficient creative performance improvements.
 
 Autoencoders bridge these gaps.
 
@@ -80,7 +81,7 @@ However, **customer behavior is complex and unlabeled**. Autoencoders learn **la
 
  ![SAEs: the next generation AI for customer behavior and segmentation](../images/behavior.jpg)
 
-**Behavioral Data Compression:**
+**Behavioral Data Compression.**
 Input: High-dimensional data (e.g., transaction frequency, product affinity, session duration, etc..).
 Latent Space: Each active neuron in the sparse layer represents a prototypical customer trait (e.g., "responds to discounts", "nighttime app user"). This allows marketing and sales teams to identify and describe a comprehensive set of customer prototypes.
 
