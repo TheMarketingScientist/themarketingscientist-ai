@@ -35,7 +35,7 @@ execute:
 
 # Introduction
 
-The marketing and advertising industry has largely ignored **unsupervised deep learning**: Advertising Holdings have spent their time and resources trying to fix a broken narrative against their measurement bias with increasingly useless linear regressions. On the other hand, Marketing AI boutiques have been created into Generative AI and consultancy firms went from supervised learning directly to Generative AI. 
+The marketing and advertising industry has largely ignored **unsupervised deep learning**: Advertising Holdings have spent their time and resources trying to fix a broken narrative against their measurement bias with increasingly useless linear regressions. On the other hand, Marketing AI boutiques have been created with Generative AI and consultancy firms went from supervised learning directly to Generative AI. 
 
 The **Undiscovered Transitional Species Saga** aims to explore and defend the business case for Marketing Deep Learning models that were skipped in the abnormal AI Maturity progression that hype and salesy overcommitment has put us in.  
 
@@ -61,11 +61,11 @@ Autoencoders bridge these gaps.
 
 Traditional **Marketing AI** models rely heavily on labeled data.  
 
-- Churn models  
-- CLV predictions    
-- Attribution  
-- Audience and Creative Optimization  
-- Pretty much everything!    
+- Churn models.    
+- CLV predictions.      
+- Attribution.    
+- Audience and Creative Optimization.    
+- Pretty much everything.      
 
 
 However, **customer behavior is complex and unlabeled**. Autoencoders learn **latent representations** that reveal **deep behavioral patterns**.
