@@ -39,9 +39,18 @@ The marketing and advertising industry has largely ignored **unsupervised deep l
 
 Advertising holdings have invested their resources fixing a broken narrative against their measurement bias with linear regressions. On the other hand, Marketing AI boutiques have been created in the same era of Generative AI and consultancy firms went from supervised learning directly to Generative AI. 
 
-This **Undiscovered Transitional Species Saga** aims to explore and defend the business case for Marketing Deep Learning models skipped in the abnormal AI Maturity progression that hype and salesy overcommitment has put us in.  
+This **Undiscovered Transitional Species** article series aims to explore and defend the business case for Marketing Deep Learning models that have been bypassed in the abnormal AI maturity progression, enforced by hype and chip development.
 
-Autoencoders significantly improve recommendations, segmentation and customer journeys. Autoencoders are a form of **Representation Learning**, they offer advanced creative applications and considerable interpretability if correctly set up.
+I begin by examining the value of autoencoders in Marketing and Advertising, highlighting their business value without the need for a full Generative AI architecture. 
+
+In this initial discussion, I propose two applications for autoencoders:    
+
+- 1. Enhancing the business value obtained from customer segmentation.   
+- 2. Exploiting branding to improve ROI on ad creatives, by cutting production costs and significantly improving diminishing returns on ad spend.  
+
+
+Autoencoders are a form of **Representation Learning**, they offer advanced audience targeting and creative applications, with considerable interpretability if correctly set up.  
+
 
 What are the symptoms of ignoring Autoencoders?
 
@@ -76,7 +85,8 @@ However, **customer behavior is complex and unlabeled**. Autoencoders learn **la
 ---
 
 
-# A couple of Marketing Use Cases for Autoencoders
+# A couple of Marketing Use Cases for Autoencoders  
+
 
 ## 1. Sparse Autoencoders → Interpretable Segmentation  
 > The Objective: Transform high-dimensional behavioral data (e.g., purchase history, browsing patterns, app usage) into human-interpretable customer segments using sparse autoencoders (SAEs), which enforce sparsity in latent representations to uncover disjoint patterns.
@@ -92,7 +102,8 @@ Input: High-dimensional data (e.g., transaction frequency, product affinity, ses
 Latent Space: Each active neuron in the sparse layer represents a prototypical customer trait (e.g., "responds to discounts", "nighttime app user"). This allows marketing and sales teams to identify and describe a comprehensive set of customer prototypes.
 
 **Segment Identification:**
-Cluster latent codes (sparse vectors) to group customers with similar activation patterns. Unlike traditional clustering (e.g. k-means), **SAEs** automatically learn meaningful variations, removing guesswork from customer variable selection.
+Cluster latent codes (sparse vectors) to group customers with similar activation patterns. Unlike traditional clustering (e.g. k-means), **SAEs** automatically learn meaningful variations, removing guesswork from customer variable selection.  
+
 
 
 ## 2. VAEs (Variational Autoencoders) → Brand Attributes Style for Ad Creatives & Branding  
@@ -115,7 +126,7 @@ The power of VAEs lies in their ability to learn continuous, structured represen
 
 - Organizes style elements systematically.
 - Separates independent design factors.
-- Enables targeted modifications.
+- Enables targeted modifications.  
 
 
 ---
@@ -127,7 +138,7 @@ The power of VAEs lies in their ability to learn continuous, structured represen
 🚧 **Lack of data engineering infrastructure for deep learning**, prioritizing legacy investments.  
 🚧 Fear of "black box" models. These fears are unjustified, see coming articles on Interpretability.  
 
-Many companies prefer the **status quo**, but it’s holding them back from transformative business results.
+Many companies prefer the **status quo**, but it’s holding them back from transformative business results.  
 
 
 ---
@@ -137,7 +148,8 @@ Many companies prefer the **status quo**, but it’s holding them back from tran
 
 ✅ Brands must invest in **scalable AI platforms** like **Vertex AI, SageMaker and Databricks.**  
 ✅ Agencies should shift from **outdated segmentation** to **representation learning.**  
-✅ AI practitioners must integrate **Deep Learning & Actionable Marketing Intelligence.**
+✅ AI practitioners must integrate **Deep Learning & Actionable Marketing Intelligence.**  
+
 
 The future of **Marketing AI** can't only be more uncertain attribution. It's high time we move to **Unsupervised & Deep**.
 
