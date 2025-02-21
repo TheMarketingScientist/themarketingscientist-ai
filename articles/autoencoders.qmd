@@ -37,7 +37,7 @@ execute:
 
 The marketing and advertising industry has largely ignored **unsupervised deep learning**: Advertising Holdings have spent their time and resources trying to fix a broken narrative against their measurement bias with increasingly useless linear regressions. On the other hand, Marketing AI boutiques have been created into Generative AI and consultancy firms went from supervised learning directly to Generative AI. 
 
-The **Undiscovered Transitional Species Saga** aims to explore and defend the business case for Marketing Deep Learning models that were skipped in the abnormal AI Maturity progression that hype and salesy overcomitment has put us in.  
+The **Undiscovered Transitional Species Saga** aims to explore and defend the business case for Marketing Deep Learning models that were skipped in the abnormal AI Maturity progression that hype and salesy overcommitment has put us in.  
 
 Autoencoders significantly improve recommendations, segmentation and customer journeys. Autoencoders are a form of **Representation Learning**, they offer advanced creative applications and considerable interpretability if correctly setup.
 
@@ -94,7 +94,7 @@ Cluster latent codes (sparse vectors) to group customers with similar activation
 
 
 ## 2. VAEs (Variational Autoencoders) → Brand Attributes Style for Ad Creatives & Branding  
-> The Objective: Capture brand visual patterns and reconstruct them for better ad creative performance while mantaining brand guidelines.
+> The Objective: Capture brand visual patterns and reconstruct them for better ad creative performance while maintaining brand guidelines.
 
  ![Variational Autoencoders: Capture visual patterns and reproduce brand style](../images/vaes.png)
 
@@ -119,9 +119,9 @@ The power of VAEs lies in their ability to learn continuous, structured represen
 ---
 
 
-# Why Agencies, Boutiqes & Firms Have Skipped This Opportunity
+# Why Agencies, Boutiques & Firms Have Skipped This Opportunity
 
-🚧 Rule-based heuristics & ancient unaccurate linear models dominate.  
+🚧 Rule-based heuristics & inaccurate linear models dominate.  
 🚧 **Lack of data engineering infrastructure for deep learning**, prioritizing legacy investments.  
 🚧 Fear of "black box" models. These fears are unjustified, see coming articles on Interpretability.  
 
