@@ -1,9 +1,9 @@
 ---
-title: "<br><br><br><br><br><br>AI High Value Audiences <br><br> Part 1: Comparing to look alike audiences, identifying best Telco audiences to target for increased CLV and deplying them to marketing platforms <br><br>"
+title: "<br><br><br><br><br><br>AI High Value Audiences <br><br> Part 1: Comparing to lookalike audiences, identifying best Telco audiences to target for increased CLV and deploying them to marketing platforms <br><br>"
 author: Andres Acosta
 date: 2025-03-17
 image: ../images/best-audience.png
-description: In this article I compare my AI High Value Audiences (AI HVAs) to look alike (LAL) audience methods like those used by Meta, several other platforms and some advertising agencies (WPP, RAPP and IPG). I identify high value Telco audiences for CLV (Customer Life Value) as the main business KPI. The article ends providing a guidance on AI HVAs deployment on Marketing Platforms.
+description: In this article I compare my AI High Value Audiences (AI HVAs) to lookalike (LAL) audience methods like those used by Meta, several other platforms and some advertising agencies (WPP, RAPP and IPG). I identify high value Telco audiences for CLV (Customer Life Value) as the main business KPI. The article closes with a guidance on AI HVAs deployment on Marketing Platforms.
 featured: true
 format:
   html:
