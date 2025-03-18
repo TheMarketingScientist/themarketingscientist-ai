@@ -104,7 +104,7 @@ Model training may require XGBoost Regression on CLV, due to its robustness and 
 
 #### **Model Results**
 
-As an example, one can find both the best and the worst audiences to target if you want to increase the overall CLV. We have done PCA to understand the 2 most important principal components in finding both audiences. The %variance expalained in by the principal components is decent in both cases, but I won't go into it right now, as it's not the focus of this article.
+As an example, one can find both the best and the worst audiences to target if you want to increase the overall CLV. We have done PCA to understand the 2 most important principal components in finding both audiences. The %variance explained in by the principal components is decent in both cases, but I won't go into it right now, as it's not the focus of this article.
 
 ![Best Audience: Apple users with high reliance on data and daily commuters. High income and strogng streaming video and platform consumers.](../images/best-cluster.png)  
 
