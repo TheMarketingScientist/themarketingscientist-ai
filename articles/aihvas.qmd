@@ -43,7 +43,7 @@ execute:
 
 # **Introduction**  
 
-Audience targeting plays a crucial role in marketing performance. Traditionally, marketers have relied on **Lookalike Audiences (LALs)**, which replicate users similar to an existing seed audience (an audience of reference). However, with the advancements in data availability, AI and machine learning, I created a more powerful approach: **AI High-Value Audiences (AI HVAs)**.  
+Audience targeting plays a crucial role in marketing performance. Traditionally, marketers have relied on **Lookalike Audiences (LALs)**, which replicate users similar to an existing seed audience (an audience of reference). However, with the advancements in data availability, AI and machine learning, I created a more powerful approach: **AI High-Value Audiences (AI HVAs)**.    
 
 This article explores **the fundamental differences between Lookalike Audiences and HVAs**, how HVAs can **optimize audience targeting** and how can AI HVAs be deployed to Marketing Platforms. I will illustrate these concepts using **a case study from the telecommunications industry.**  
 
