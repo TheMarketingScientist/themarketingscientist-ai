@@ -563,6 +563,30 @@ def inspect_math(body: str) -> dict[str, Any]:
     }
 
 
+def legacy_math_delimiter_errors(body: str) -> list[str]:
+    """Reject unsupported TeX delimiters after code regions have been masked."""
+
+    errors: list[str] = []
+    conventions = (
+        (r"\(", "inline", "$...$"),
+        (r"\[", "display", "$$...$$"),
+    )
+    for delimiter, kind, required_syntax in conventions:
+        offset = 0
+        while offset < len(body):
+            start = body.find(delimiter, offset)
+            if start < 0:
+                break
+            if not is_escaped(body, start):
+                errors.append(
+                    f"Unsupported {kind} math delimiter '{delimiter}' at body line "
+                    f"{line_number(body, start)}. Use Pandoc {kind} math syntax "
+                    f"'{required_syntax}'."
+                )
+            offset = start + len(delimiter)
+    return errors
+
+
 def metadata_execution_indicators(metadata: dict[str, Any]) -> list[dict[str, Any]]:
     """Report engine declarations and explicit notebook requirements."""
 
@@ -628,7 +652,12 @@ def inspect_article(article_path: pathlib.Path) -> ArticleInspection:
         math=inspect_math(safe_body),
         execution_indicators=indicators,
         classification=classification,
-        structural_errors=structural_errors + markdown_errors + html_parser.errors,
+        structural_errors=(
+            structural_errors
+            + legacy_math_delimiter_errors(safe_body)
+            + markdown_errors
+            + html_parser.errors
+        ),
     )
 
 

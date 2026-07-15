@@ -55,6 +55,8 @@ class SourceInspectionTests(unittest.TestCase):
         self.root = pathlib.Path(self.temporary_directory.name)
         (self.root / "_quarto.yml").write_text(quarto_config_text(), encoding="utf-8")
         (self.root / "articles").mkdir()
+        (self.root / "images").mkdir()
+        (self.root / "images" / "featured.png").write_bytes(b"featured-image")
         self.article = self.root / "articles" / "test-article.qmd"
 
     def tearDown(self) -> None:
@@ -65,14 +67,64 @@ class SourceInspectionTests(unittest.TestCase):
         return validator.inspect_article(self.article)
 
     def test_inline_and_display_equations(self) -> None:
-        inspection = self.inspect("Inline $x^2 + y^2 = z^2$.\n\n$$\nE = mc^2\n$$\n")
+        inspection = self.inspect(
+            "Inline $x_t$, $A_t$, and $\\lambda$.\n\n$$\nE = mc^2\n$$\n"
+        )
         self.assertTrue(inspection.math["present"])
-        self.assertEqual(inspection.math["inline_count"], 1)
+        self.assertEqual(inspection.math["inline_count"], 3)
         self.assertEqual(inspection.math["display_count"], 1)
+        self.assertEqual(inspection.structural_errors, [])
 
     def test_prices_containing_dollar_signs_are_not_math(self) -> None:
-        inspection = self.inspect("Plans cost $5, $10, or $25.\n")
+        inspection = self.inspect("The plans cost $100 and $2.5M.\n")
         self.assertFalse(inspection.math["present"])
+
+    def test_legacy_inline_math_delimiter_is_a_hard_error(self) -> None:
+        self.article.write_text(article_text(r"Inline \(x_t\)." + "\n"), encoding="utf-8")
+
+        report = validator.validate_source(self.root, self.article)
+
+        self.assertEqual(report.status, "failed")
+        self.assertTrue(
+            any(
+                "Unsupported inline math delimiter" in error and "$...$" in error
+                for error in report.errors
+            ),
+            report.errors,
+        )
+
+    def test_legacy_display_math_delimiter_is_a_hard_error(self) -> None:
+        self.article.write_text(
+            article_text("Display \\[x_t = A_t\\].\n"),
+            encoding="utf-8",
+        )
+
+        report = validator.validate_source(self.root, self.article)
+
+        self.assertEqual(report.status, "failed")
+        self.assertTrue(
+            any(
+                "Unsupported display math delimiter" in error and "$$...$$" in error
+                for error in report.errors
+            ),
+            report.errors,
+        )
+
+    def test_legacy_delimiters_inside_fenced_and_inline_code_are_ignored(self) -> None:
+        inspection = self.inspect(
+            "`\\(inline example\\)` and `\\[display example\\]`\n\n"
+            "```text\n\\(fenced inline\\)\n\\[fenced display\\]\n```\n"
+        )
+        self.assertEqual(inspection.structural_errors, [])
+
+    def test_legacy_delimiters_inside_html_code_elements_are_ignored(self) -> None:
+        inspection = self.inspect(
+            "<pre>\\(pre\\)</pre>\n"
+            "<code>\\(code\\)</code>\n"
+            "<script>const value = '\\[script\\]';</script>\n"
+            "<style>/* \\[style\\] */</style>\n"
+        )
+        self.assertEqual(inspection.structural_errors, [])
 
     def test_escaped_dollars_and_inline_code_are_not_math(self) -> None:
         inspection = self.inspect(r"An escaped dollar is \$40 and code is `$x$`." + "\n")

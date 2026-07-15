@@ -118,11 +118,11 @@ $$
 
 where:
 
-- \(x_t\) is current media activity;
-- \(A_t\) is the accumulated media stock;
-- \(\lambda\) controls how slowly the effect decays.
+- $x_t$ is current media activity;
+- $A_t$ is the accumulated media stock;
+- $\lambda$ controls how slowly the effect decays.
 
-A higher value of \(\lambda\) allows media to keep receiving credit for longer.
+A higher value of $\lambda$ allows media to keep receiving credit for longer.
 
 The implied half-life is:
 

@@ -145,6 +145,7 @@ Required conventions:
 Articles may use Quarto/Pandoc content features, including:
 
 - inline math written as `$...$` and display math written as `$$...$$`;
+- never use `\( ... \)` or `\[ ... \]` math delimiters in article QMD files;
 - Markdown or raw HTML tables;
 - blockquotes, footnotes, and citations;
 - raw HTML and fenced code blocks;
@@ -152,7 +153,7 @@ Articles may use Quarto/Pandoc content features, including:
 
 Validation is inspection-only. The publication wrapper must never rewrite, reformat, normalize, or make stylistic or editorial changes to an article QMD. It excludes fenced code, inline code, and HTML `pre`, `code`, `script`, and `style` regions from image and math discovery so that examples are not mistaken for article assets or executable content.
 
-Do not validate math by counting dollar signs. Dollar signs may represent prices, escaped text, or code. Source inspection only identifies likely standard Pandoc math spans; Quarto rendering is the authoritative syntax check. When likely math exists, rendered-output validation looks for math markup or MathJax/KaTeX support. An inconclusive markup check is a warning requiring visual review, not an automatic failure.
+Do not validate math by counting dollar signs. Currency dollar signs such as `$100` and `$2.5M` remain ordinary text and must not be interpreted as math. Escaped dollar signs, fenced code blocks, inline code, raw code, and HTML `pre`, `code`, `script`, and `style` elements must not be modified during math validation. Source inspection only identifies likely standard Pandoc math spans; Quarto rendering is the authoritative syntax check. When likely math exists, rendered-output validation looks for math markup or MathJax/KaTeX support. An inconclusive markup check is a warning requiring visual review, not an automatic failure.
 
 ## Body image syntax and restrictions
 
@@ -265,9 +266,27 @@ Before considering an article ready to stage:
 20. Review every warning, `git status --short`, `git diff --stat`, and the exact prospective staging list.
 21. Inspect the rendered pages locally before requesting permission to stage or publish.
 
+## Approved publication batch
+
+When the user explicitly states that they have reviewed and approved an article **for publication**, that single approval authorizes the normal validated publication sequence as one continuous batch. Approval of an image mapping, destination collision, validation run, or local preview alone is not publication approval. Publication approval does not authorize article-code execution, unrelated changes, force-pushing, branch switching, homepage changes, workflow changes, or any other expansion of scope.
+
+After explicit publication approval, do not request separate conversational confirmation between staging, committing, pushing, and read-only post-deployment verification. Perform this sequence continuously:
+
+1. Confirm the current branch is exactly `GH_Pages`, HEAD has not changed unexpectedly, the Git index is empty, and the worktree contains only the validated article publication set.
+2. Reconcile the exact prospective staging list with the validated source article, its validated source images, `_site/articles.html`, the rendered article and its required resource bundle, and matching deployable images. Exclude every unrelated article, image, generated page, homepage file or asset, workflow, internal document, and incoming-package file.
+3. Confirm `articles.qmd` was restored byte-for-byte, `articles.qmd.bak` is absent, source/deploy image SHA-256 hashes match, and rendered validation passed. Warnings remain reportable but do not interrupt the batch unless they establish a hard validation or safety failure.
+4. Stage only the exact validated list using explicit path arguments. Immediately compare `git diff --cached --name-only` with that list and stop if they differ or if any unexpected unstaged change appears.
+5. Commit once with the user-supplied message, or a concise article-specific message when none was supplied. Confirm the commit contains exactly the validated list and that the worktree and index are clean.
+6. Push `GH_Pages` to `origin` once, without force, after confirming the new commit is the only outgoing commit and contains no unrelated files.
+7. Wait for the deployment workflow triggered by that commit. Inspect its status, conclusion, steps, and relevant logs; do not treat hidden, suppressed, or masked errors as success.
+8. Verify the public article and article index return HTTP 200; the index links the article and featured thumbnail; the article references every body figure; required images, CSS, and scripts are publicly accessible; rendered math and captions remain present when applicable; the homepage remains available and unchanged in its main content; internal documentation such as `AGENTS.html` remains undeployed; local `GH_Pages` and `origin/GH_Pages` are synchronized; and the final worktree and index are clean.
+
+Stop the batch without committing, pushing, or attempting repair when validation fails, the branch is wrong, unrelated or unexpected files appear, or the staging set differs from the validated set. After a push, stop without additional commits or pushes when deployment fails or the live site differs from the expected artifact. Report the exact failure and preserve the resulting state for review.
+
 ## Git safety
 
 - **Never run `git add`, `git commit`, or `git push` without explicit user approval.**
+- Explicit approval of a reviewed article for publication satisfies this requirement for the single approved publication batch above; do not ask again between its stage, commit, push, and verification phases.
 - Never force-push either branch.
 - Never merge, reset, or switch branches as part of publication unless the user separately authorizes it.
 - Never include unrelated existing changes in an article publication.
