@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Andres Acosta">
+<meta name="dcterms.date" content="2026-07-15">
+<meta name="description" content="Upper-funnel media can be under-credited or over-credited when MMM relies too heavily on revenue alone. Long-term contribution should be tested through lag and decay sensitivity, model stability, incrementality evidence and the intermediate demand signals media is expected to move.">
+
+<title> Is 𝗬𝗼𝘂𝗿 𝗠𝗠𝗠 𝘂𝗻𝗱𝗲𝗿-𝗰𝗿𝗲𝗱𝗶𝘁𝗶𝗻𝗴 𝘂𝗽𝗽𝗲𝗿-𝗳𝘂𝗻𝗻𝗲𝗹 𝗺𝗲𝗱𝗶𝗮? </title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="is-your-mmm-under-crediting-upper-funnel-media_files/libs/clipboard/clipboard.min.js"></script>
+<script src="is-your-mmm-under-crediting-upper-funnel-media_files/libs/quarto-html/quarto.js"></script>
+<script src="is-your-mmm-under-crediting-upper-funnel-media_files/libs/quarto-html/popper.min.js"></script>
+<script src="is-your-mmm-under-crediting-upper-funnel-media_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="is-your-mmm-under-crediting-upper-funnel-media_files/libs/quarto-html/anchor.min.js"></script>
+<link href="is-your-mmm-under-crediting-upper-funnel-media_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="is-your-mmm-under-crediting-upper-funnel-media_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="is-your-mmm-under-crediting-upper-funnel-media_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="is-your-mmm-under-crediting-upper-funnel-media_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="is-your-mmm-under-crediting-upper-funnel-media_files/libs/bootstrap/bootstrap-a1ff8711b79ae3724c050874b28d9907.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../article.css">
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><br><br><br><br><br><br>Is 𝗬𝗼𝘂𝗿 𝗠𝗠𝗠 𝘂𝗻𝗱𝗲𝗿-𝗰𝗿𝗲𝗱𝗶𝘁𝗶𝗻𝗴 𝘂𝗽𝗽𝗲𝗿-𝗳𝘂𝗻𝗻𝗲𝗹 𝗺𝗲𝗱𝗶𝗮?<br><br></h1>
+</div>
+
+<div>
+  <div class="description">
+    Upper-funnel media can be under-credited or over-credited when MMM relies too heavily on revenue alone. Long-term contribution should be tested through lag and decay sensitivity, model stability, incrementality evidence and the intermediate demand signals media is expected to move.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Andres Acosta </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 15, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<header class="site-header">
+    <h1 class="site-title">The Marketing Scientist</h1>
+    <nav class="site-nav">
+        <a href="../index.html" class="nav-link">🏠 Home</a>
+        <a href="../articles.html" class="nav-link">📚 Articles</a>
+    </nav>
+</header>
+<section id="introduction" class="level1">
+<h1><strong>Introduction</strong></h1>
+<p>Your MMM may be under-crediting upper-funnel media.</p>
+<p>But I would frame the issue slightly differently, because the problem is not as simple as giving television, video or another “brand” channel a longer adstock.</p>
+<p>A channel is not inherently upper funnel.</p>
+<p>The same channel can play very different roles depending on:</p>
+<ul>
+<li>targeting;</li>
+<li>creative;</li>
+<li>audience;</li>
+<li>placement;</li>
+<li>frequency;</li>
+<li>offer;</li>
+<li>campaign objective.</li>
+</ul>
+<p>Video can introduce a brand, generate consideration, retarget an existing visitor or support a direct-response offer. Paid search can capture existing demand, but generic search can also introduce a brand to buyers who had not considered it before.</p>
+<p>The funnel role belongs to the campaign and the execution, not permanently to the channel name.</p>
+<p>This also creates a problem for MMM when data is aggregated too broadly. A single “video” or “social” variable may contain campaigns performing several different jobs. The model then returns one contribution estimate for media that did not have one consistent role.</p>
+<hr>
+</section>
+<section id="upper-funnel-contribution-should-not-be-identified-from-revenue-alone" class="level1">
+<h1><strong>Upper-funnel contribution should not be identified from revenue alone</strong></h1>
+<p>Revenue is usually the main business outcome in MMM.</p>
+<p>However, upper-funnel media can affect the business through several pathways before the full impact appears in revenue:</p>
+<ul>
+<li>awareness;</li>
+<li>earned attention;</li>
+<li>salience;</li>
+<li>willingness to search;</li>
+<li>consideration;</li>
+<li>willingness to pay;</li>
+<li>organic acquisition;</li>
+<li>customer quality;</li>
+<li>retention;</li>
+<li>re-acquisition costs;</li>
+<li>downstream conversion efficiency;</li>
+<li>customer lifetime value.</li>
+</ul>
+<p>A revenue model may capture part of this value, especially when the time series is long and the media variation is informative. But revenue alone gives the model very little help in distinguishing delayed media impact from every other slow-moving force affecting the business.</p>
+<p>A model may assign future revenue to media because media created demand.</p>
+<p>It may also assign future revenue to media because media investment happened to move alongside:</p>
+<ul>
+<li>category growth;</li>
+<li>changes in distribution;</li>
+<li>pricing;</li>
+<li>promotions;</li>
+<li>competitor weakness;</li>
+<li>product improvements;</li>
+<li>seasonality;</li>
+<li>economic conditions;</li>
+<li>an unobserved trend.</li>
+</ul>
+<p>These explanations can look similar in a revenue time series.</p>
+<p>The difficulty increases as the claimed media impact becomes longer.</p>
+<hr>
+</section>
+<section id="longer-term-impact-requires-more-assumptions" class="level1">
+<h1><strong>Longer-term impact requires more assumptions</strong></h1>
+<p>The longer the term of the impact estimation, the more the result depends on assumptions around:</p>
+<ul>
+<li>lag;</li>
+<li>decay;</li>
+<li>parameter stability;</li>
+<li>persistence of media effects;</li>
+<li>separation from baseline;</li>
+<li>separation from non-media drivers;</li>
+<li>stability of the competitive and economic environment.</li>
+</ul>
+<p>A simple geometric adstock can be written as:</p>
+<p><span class="math display">\[
+A_t = x_t + \lambda A_{t-1}
+\]</span></p>
+<p>where:</p>
+<ul>
+<li>(x_t) is current media activity;</li>
+<li>(A_t) is the accumulated media stock;</li>
+<li>() controls how slowly the effect decays.</li>
+</ul>
+<p>A higher value of () allows media to keep receiving credit for longer.</p>
+<p>The implied half-life is:</p>
+<p><span class="math display">\[
+h = \frac{\log(0.5)}{\log(\lambda)}
+\]</span></p>
+<p>Small changes in the decay parameter can produce very different stories about how long media continues to affect the business.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/is-your-mmm-under-crediting-upper-funnel-media-figure-1.png" class="img-fluid figure-img" style="width:95.0%"></p>
+<figcaption>Illustrative decay curves showing how different adstock assumptions extend media credit over time.</figcaption>
+</figure>
+</div>
+<p>A longer decay can be appropriate. Brand effects do not necessarily disappear within one or two weeks.</p>
+<p>But a long tail also increases the overlap between media and slow-moving baseline factors. Once media retains credit for several months, the model has to separate that contribution from trend, category growth, pricing, distribution and other persistent variables.</p>
+<p>That separation is often fragile when:</p>
+<ul>
+<li>the observable time series is short;</li>
+<li>spend changes slowly;</li>
+<li>several media channels move together;</li>
+<li>the model estimates many parameters;</li>
+<li>there are few periods with low or zero investment;</li>
+<li>important non-media factors are missing;</li>
+<li>business conditions change during the estimation period.</li>
+</ul>
+<p>A long adstock does not prove a long-term effect. It allows the model to estimate one.</p>
+<p>The estimate still needs support.</p>
+<hr>
+</section>
+<section id="intermediate-mechanisms-should-show-up-somewhere" class="level1">
+<h1><strong>Intermediate mechanisms should show up somewhere</strong></h1>
+<p>If a model claims that upper-funnel media drives long-term revenue because it builds awareness, salience or consideration, we should expect some movement in the mechanisms connecting exposure to revenue.</p>
+<p>A simplified path may look like this:</p>
+<p><span class="math display">\[
+\text{Media}
+\rightarrow
+\text{Attention and awareness}
+\rightarrow
+\text{Search and consideration}
+\rightarrow
+\text{Customer behavior}
+\rightarrow
+\text{Revenue}
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/is-your-mmm-under-crediting-upper-funnel-media-figure-2.png" class="img-fluid figure-img" style="width:95.0%"></p>
+<figcaption>A causal pathway connecting media exposure with intermediate demand signals and financial outcomes.</figcaption>
+</figure>
+</div>
+<p>The exact pathway will vary by brand and campaign.</p>
+<p>For one advertiser, branded search may be a useful intermediate signal. For another, the relevant movement may appear in awareness, direct traffic, willingness to pay, customer quality or retention.</p>
+<p>No individual brand metric is perfect. These measures can be noisy, infrequent and affected by survey design. Some effects may also take time to appear.</p>
+<p>Still, the proposed media story should leave evidence somewhere.</p>
+<p>If the argument is that media generated future demand, but there is no movement in awareness, attention, search, consideration, customer quality, retention or any other relevant signal, confidence in the revenue attribution should fall.</p>
+<p>The model may still be correct. But the long-term effect is harder to distinguish from trend, seasonality, competitor effects or omitted variables.</p>
+<hr>
+</section>
+<section id="brand-measurement-becomes-part-of-mmm-validation" class="level1">
+<h1><strong>Brand measurement becomes part of MMM validation</strong></h1>
+<p>Brand measurement should not sit completely outside the MMM process.</p>
+<p>It can help evaluate whether the model’s explanation makes sense.</p>
+<p>For example, imagine two MMM specifications:</p>
+<ul>
+<li>Model A assigns a modest, shorter-lived contribution to video.</li>
+<li>Model B assigns a larger contribution that persists for several months.</li>
+</ul>
+<p>Suppose Model B also aligns better with:</p>
+<ul>
+<li>brand-lift studies;</li>
+<li>changes in awareness;</li>
+<li>branded search;</li>
+<li>direct traffic;</li>
+<li>consideration;</li>
+<li>customer acquisition quality;</li>
+<li>later retention.</li>
+</ul>
+<p>That does not automatically prove Model B is correct. But the result has more support than a long-term revenue coefficient standing on its own.</p>
+<p>Now assume the opposite. Model B assigns a large long-term contribution, but:</p>
+<ul>
+<li>brand indicators do not move;</li>
+<li>search behavior does not change;</li>
+<li>customer quality remains flat;</li>
+<li>experimental evidence is weak;</li>
+<li>the result disappears when trend specification changes.</li>
+</ul>
+<p>That should create skepticism, even when the model fits revenue well.</p>
+<p>Brand and intermediate metrics can help distinguish models that explain the same sales history but imply very different causal stories.</p>
+<hr>
+</section>
+<section id="do-not-automatically-add-every-brand-metric-as-a-control" class="level1">
+<h1><strong>Do not automatically add every brand metric as a control</strong></h1>
+<p>There is also a modeling risk here.</p>
+<p>If awareness or consideration is part of the pathway through which media affects revenue, controlling for it directly in the revenue equation may remove part of the media effect.</p>
+<p>For example:</p>
+<p><span class="math display">\[
+\text{Media}
+\rightarrow
+\text{Awareness}
+\rightarrow
+\text{Revenue}
+\]</span></p>
+<p>If awareness is inserted as an ordinary control, the model may estimate media contribution after holding awareness constant. That may block the mediated effect we wanted to measure.</p>
+<p>Brand metrics may be more useful as:</p>
+<ul>
+<li>outcomes in separate models;</li>
+<li>validation signals;</li>
+<li>calibration evidence;</li>
+<li>experiment outcomes;</li>
+<li>components of a mediation framework;</li>
+<li>evidence used during model selection.</li>
+</ul>
+<p>The correct treatment depends on the causal role of the variable. Awareness can be a mediator in one analysis, a confounder in another context or simply a noisy proxy for an underlying demand state.</p>
+<p>Adding it to the model without a clear causal rationale can create another problem while trying to solve the first one.</p>
+<hr>
+</section>
+<section id="how-an-mmm-can-under-credit-upper-funnel-media" class="level1">
+<h1><strong>How an MMM can under-credit upper-funnel media</strong></h1>
+<p>Upper-funnel media may be under-credited when:</p>
+<ul>
+<li>decay is constrained to be too short;</li>
+<li>the outcome window is too narrow;</li>
+<li>the model only values the first transaction;</li>
+<li>retention and customer quality are excluded;</li>
+<li>search and other demand-capture channels receive credit for demand created elsewhere;</li>
+<li>brand investment changes too little to be identified clearly;</li>
+<li>spend is highly correlated with other channels;</li>
+<li>experimental results suggest more impact than the MMM recovers;</li>
+<li>the model ignores later improvements in organic demand or re-acquisition cost.</li>
+</ul>
+<p>A brand campaign can have a modest immediate revenue effect and still improve customer economics later.</p>
+<p>A model focused only on short-term sales may miss that value.</p>
+<hr>
+</section>
+<section id="how-an-mmm-can-over-credit-upper-funnel-media" class="level1">
+<h1><strong>How an MMM can over-credit upper-funnel media</strong></h1>
+<p>Upper-funnel media may also be over-credited when:</p>
+<ul>
+<li>a long adstock absorbs trend;</li>
+<li>the model attributes category growth to media;</li>
+<li>decay is weakly identified and driven mainly by priors;</li>
+<li>media contribution remains high long after activity stops;</li>
+<li>the result changes sharply when non-media controls are added;</li>
+<li>correlated channels are not separated well;</li>
+<li>the model gives media credit during periods with little useful variation;</li>
+<li>intermediate demand signals do not support the claimed effect;</li>
+<li>experiments contradict the model;</li>
+<li>the contribution is unstable across time windows.</li>
+</ul>
+<p>Extending the adstock can solve one bias and create another.</p>
+<p>The appropriate decay should be tested, not selected because the channel has been labeled “upper funnel.”</p>
+<hr>
+</section>
+<section id="what-i-would-test" class="level1">
+<h1><strong>What I would test</strong></h1>
+<p>For a channel receiving a large long-term contribution, I would examine at least the following.</p>
+<section id="lag-and-decay-sensitivity" class="level2">
+<h2 class="anchored" data-anchor-id="lag-and-decay-sensitivity"><strong>Lag and decay sensitivity</strong></h2>
+<p>How much does contribution change across reasonable lag and decay assumptions?</p>
+<p>If small parameter changes produce completely different ROI estimates, the model is telling us that the result is weakly identified.</p>
+</section>
+<section id="time-window-stability" class="level2">
+<h2 class="anchored" data-anchor-id="time-window-stability"><strong>Time-window stability</strong></h2>
+<p>Does the contribution remain credible when the model is estimated over different periods?</p>
+<p>A long-term effect that only appears in one window may depend on a particular trend or business event.</p>
+</section>
+<section id="control-sensitivity" class="level2">
+<h2 class="anchored" data-anchor-id="control-sensitivity"><strong>Control sensitivity</strong></h2>
+<p>What happens when pricing, distribution, promotions, category indicators or competitor activity are introduced?</p>
+<p>A sharp collapse in contribution may indicate that media was previously absorbing non-media variation.</p>
+</section>
+<section id="prior-sensitivity" class="level2">
+<h2 class="anchored" data-anchor-id="prior-sensitivity"><strong>Prior sensitivity</strong></h2>
+<p>For Bayesian MMM, how much of the result comes from the observed data and how much comes from the prior?</p>
+<p>Priors are necessary, especially when data is weak. But the level of prior dependence should be visible.</p>
+</section>
+<section id="intermediate-signal-alignment" class="level2">
+<h2 class="anchored" data-anchor-id="intermediate-signal-alignment"><strong>Intermediate-signal alignment</strong></h2>
+<p>Do awareness, search, consideration, direct traffic, customer quality or another relevant metric move in a compatible direction?</p>
+<p>The expected signal depends on the campaign. The model should be evaluated against that campaign’s proposed mechanism.</p>
+</section>
+<section id="experimental-calibration" class="level2">
+<h2 class="anchored" data-anchor-id="experimental-calibration"><strong>Experimental calibration</strong></h2>
+<p>Where possible, compare the MMM with geo tests, conversion lift, brand lift, matched-market studies or other incrementality evidence.</p>
+<p>Experiments will not answer every long-term question, but they can restrict the range of plausible effects.</p>
+</section>
+<section id="customer-economics" class="level2">
+<h2 class="anchored" data-anchor-id="customer-economics"><strong>Customer economics</strong></h2>
+<p>Does the media influence:</p>
+<ul>
+<li>repeat purchases;</li>
+<li>retention;</li>
+<li>lifetime value;</li>
+<li>re-acquisition cost;</li>
+<li>willingness to pay;</li>
+<li>downstream media efficiency?</li>
+</ul>
+<p>Upper-funnel value may be missed when the KPI only reflects immediate revenue.</p>
+<hr>
+</section>
+</section>
+<section id="a-better-fix-than-extending-adstock" class="level1">
+<h1><strong>A better fix than extending adstock</strong></h1>
+<p>The fix is not only to use a longer adstock or a smaller decay rate.</p>
+<p>A better process is:</p>
+<ol type="1">
+<li>Test a reasonable range of lag and decay assumptions.</li>
+<li>Check whether the contribution is stable across specifications and time windows.</li>
+<li>Introduce relevant non-media controls.</li>
+<li>Compare the result with incrementality evidence.</li>
+<li>Measure the intermediate outcomes the campaign is expected to influence.</li>
+<li>Include longer-term customer economics when they are relevant.</li>
+<li>Reject models whose causal explanation is not supported outside the revenue equation.</li>
+</ol>
+<p>Upper-funnel media impact should not be estimated from revenue in isolation.</p>
+<p>If the causal story is demand generation, some intermediate evidence should appear somewhere.</p>
+<p>That evidence may be awareness, attention, search, consideration, willingness to pay, customer quality, retention or another signal connected to the campaign’s job.</p>
+<p>Without it, a long-term revenue contribution remains difficult to separate from baseline and omitted factors.</p>
+<p>A longer decay rate may produce more credit.</p>
+<p>It does not automatically produce a better measurement.</p>
+<hr>
+<div class="connect-section">
+  <div class="linkedin-button">
+    <a href="https://www.linkedin.com/in/themarketingscientist" target="_blank">
+      <i class="bi bi-linkedin"></i>
+      The Marketing Scientist
+    </a>
+  </div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
