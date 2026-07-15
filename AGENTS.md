@@ -21,7 +21,10 @@ This repository publishes the article section of **The Marketing Scientist** web
 - Article generator: `articles/generate_articles.py`.
 - Publication entry point: `publish_article.ps1`.
 - Source and rendered-output validator: `scripts/article_validator.py`.
+- Incoming-package importer: `scripts/incoming_package.py`.
 - Validator tests: `tests/test_article_validator.py`.
+- Incoming-package tests: `tests/test_incoming_package.py`.
+- Ignored incoming authoring packages: `incoming/<slug>/**`.
 - Article-index template: `articles.qmd`.
 - Source images: `images/**`.
 - Article styles: `article.css` and `style.css`.
@@ -36,6 +39,38 @@ This repository publishes the article section of **The Marketing Scientist** web
 - `publish_article.ps1` is the thin Windows orchestration and Git-safety layer. It verifies the repository root, exact `GH_Pages` branch, tools, staged and unrelated changes; consumes validator JSON; invokes the existing generator only after source validation; checks post-generation Git state; and stops before staging. It invokes Python child processes with UTF-8 standard streams and captures stdout, stderr, and exit codes independently so ordinary native stderr does not become a PowerShell terminating error.
 - `scripts/article_validator.py` owns QMD inspection, metadata and image validation, Editorial/Computational classification, post-render deployable-image synchronization, and read-only rendered HTML/CSS/link/math validation. It never rewrites article QMD content.
 - `tests/test_article_validator.py` uses `unittest` and temporary directories outside the repository for parser and rendered-artifact fixtures.
+- `scripts/incoming_package.py` creates ignored incoming folders, resolves semantic image roles, imports verified copies into `articles/` and `images/`, and never invokes Git, Quarto, or the generator itself.
+- `tests/test_incoming_package.py` exercises package creation, mapping, collisions, byte-preserving placeholder replacement, and SHA-256 verification using temporary repositories only.
+
+## Incoming article packages
+
+Create a package from the repository root without invoking Git, Quarto, or rendering:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\publish_article.ps1 -CreateIncomingPackage "Pricing vs CAC"
+```
+
+Add `-OpenFolder` to open the new folder in Windows File Explorer. Creation derives a safe slug, creates `incoming/<slug>/`, and writes `package.yml`; it refuses an existing package. Put exactly one QMD and one or more `.gif`, `.jpeg`, `.jpg`, `.png`, `.svg`, or `.webp` images directly in that folder. Incoming packages are ignored by Git and must never be deleted, archived, or modified automatically after import or deployment.
+
+Use semantic placeholders instead of manually naming destination images:
+
+```yaml
+image: "{{image:featured}}"
+```
+
+```markdown
+![Caption]({{image:figure-1}}){width=80% fig-align="center"}
+```
+
+Figure roles must be sequential (`figure-1`, `figure-2`, and so on). Process the package with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\publish_article.ps1 -IncomingFolder .\incoming\pricing-vs-cac
+```
+
+The importer resolves image roles from explicit `package.yml` assignments, filename hints, useful dimensions/aspect ratios, and deterministic ordering last. If semantic mapping remains ambiguous, it performs no import and prints one consolidated table plus either the exact `package.yml` assignments or one rerun command using `-ApproveImageMapping <SHA-256-token>`. The token binds approval to the reviewed QMD and image bytes; changing the package invalidates it. Destination collisions stop before writes unless the user separately passes `-ApproveDestinationCollisions` after reviewing every collision.
+
+Successful import preserves the incoming package byte-for-byte, copies the QMD to `articles/<slug>.qmd`, copies images to article-specific names under `images/`, replaces only exact semantic placeholder bytes, and verifies every destination with SHA-256. It then continues through the existing source validation, classification, permitted Editorial render, image synchronization, rendered validation, and prospective staging report. Computational articles still stop before rendering. No incoming mode stages, commits, pushes, changes branches, or touches the homepage. After a later successful deployment, report that the preserved package may be archived or deleted, but never archive or delete it without explicit user approval.
 
 `_quarto.yml` must retain an explicit `project.render` allowlist containing exactly:
 
