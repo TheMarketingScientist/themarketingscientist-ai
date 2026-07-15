@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: deploy-gh-pages
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -18,38 +22,16 @@ jobs:
           ref: GH_Pages
           fetch-depth: 0  # Ensure full history is available
 
-      - name: Ensure _site folder exists
+      - name: Validate deployment artifact
         run: |
           if [ ! -d "_site" ]; then
             echo "Error: _site folder missing, deployment canceled."
             exit 1
           fi
-
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          fetch-depth: 0
-
-      - name: Backup existing static files
-        run: |
-          mkdir -p backup
-          cp -r index.html backup/ || true
-          cp -r CNAME backup/ || true
-          cp -r *.jpg backup/ || true
-          cp -r *.png backup/ || true
-          cp -r *.svg backup/ || true
-          cp -r *.ico backup/ || true
-          cp -r style.css backup/ || true
-
-      - name: Checkout GH_Pages branch again
-        uses: actions/checkout@v4
-        with:
-          ref: GH_Pages
-
-      - name: Clean old articles before deploying
-        run: |
-          rm -rf articles  # Remove only the articles folder in gh-pages
+          if [ -e "_site/index.html" ]; then
+            echo "Error: _site/index.html must not overwrite the manually maintained homepage."
+            exit 1
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
@@ -58,22 +40,3 @@ jobs:
           publish_dir: _site
           publish_branch: gh-pages
           keep_files: true  # Keeps your home page and other files
-
-
-      - name: Restore preserved static files
-        run: |
-          cp -r backup/* . || true  # Restore all backed-up files
-          rm -rf backup  # Cleanup backup folder
-
-      - name: Ensure .nojekyll exists (fix Jekyll auto-processing issue)
-        run: |
-          touch .nojekyll
-          echo "Verified .nojekyll to prevent Jekyll processing issues."
-
-      - name: Commit and push changes
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add .
-          git commit -m "Preserve static files while updating articles" || echo "No changes to commit"
-          git push origin gh-pages || echo "Push failed, but continuing workflow"
