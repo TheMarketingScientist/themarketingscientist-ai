@@ -1,6 +1,9 @@
 project:
   output-dir: _site
   title: "The Marketing Scientist"
+  render:
+    - articles.qmd
+    - "articles/*.qmd"
 
 format:
   html:

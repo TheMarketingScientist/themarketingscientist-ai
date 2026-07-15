@@ -3,12 +3,17 @@
 from __future__ import annotations
 
 import contextlib
+import base64
 import io
 import json
 import pathlib
+import subprocess
+import sys
 import tempfile
 import unittest
+from unittest import mock
 
+from articles import generate_articles
 from scripts import article_validator as validator
 
 
@@ -30,12 +35,25 @@ def article_text(body: str, extra_yaml: str = "") -> str:
     )
 
 
+def quarto_config_text() -> str:
+    """Return the article-only Quarto render configuration used by fixtures."""
+
+    return (
+        "project:\n"
+        "  output-dir: _site\n"
+        "  render:\n"
+        "    - articles.qmd\n"
+        '    - "articles/*.qmd"\n'
+    )
+
+
 class SourceInspectionTests(unittest.TestCase):
     """Exercise conservative source inspection using temporary QMD files."""
 
     def setUp(self) -> None:
         self.temporary_directory = tempfile.TemporaryDirectory()
         self.root = pathlib.Path(self.temporary_directory.name)
+        (self.root / "_quarto.yml").write_text(quarto_config_text(), encoding="utf-8")
         (self.root / "articles").mkdir()
         self.article = self.root / "articles" / "test-article.qmd"
 
@@ -132,6 +150,7 @@ class GeneratedHtmlTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temporary_directory = tempfile.TemporaryDirectory()
         self.root = pathlib.Path(self.temporary_directory.name)
+        (self.root / "_quarto.yml").write_text(quarto_config_text(), encoding="utf-8")
 
     def tearDown(self) -> None:
         self.temporary_directory.cleanup()
@@ -155,7 +174,7 @@ class GeneratedHtmlTests(unittest.TestCase):
         self.assertIn("result", inspection.anchors)
         self.assertEqual(inspection.math_signals, {"math markup", "MathJax script"})
 
-    def test_rendered_validation_syncs_and_verifies_local_assets(self) -> None:
+    def test_featured_image_synchronization_and_rendered_assets(self) -> None:
         articles = self.root / "articles"
         images = self.root / "images"
         site = self.root / "_site"
@@ -195,13 +214,14 @@ class GeneratedHtmlTests(unittest.TestCase):
             encoding="utf-8",
         )
 
+        sync_report = validator.synchronize_images(self.root, article)
         report = validator.validate_rendered(
             self.root,
             article,
             validator.sha256_file(template),
-            sync_images=True,
         )
 
+        self.assertEqual(sync_report.status, "passed", sync_report.errors)
         self.assertEqual(report.status, "passed", report.errors)
         self.assertEqual(report.classification, "Editorial")
         self.assertEqual(report.warnings, [])
@@ -255,6 +275,192 @@ class GeneratedHtmlTests(unittest.TestCase):
         self.assertTrue(report.errors)
         self.assertFalse(outside.exists())
 
+    def test_image_copy_detects_hash_mismatch_after_copy(self) -> None:
+        source_root = self.root / "images"
+        destination_root = self.root / "_site" / "images"
+        source_root.mkdir()
+        destination_root.mkdir(parents=True)
+        source = source_root / "featured.png"
+        destination = destination_root / "featured.png"
+        source.write_bytes(b"expected-image")
+        report = validator.ValidationReport()
+
+        def corrupt_copy(_source: pathlib.Path, target: pathlib.Path) -> None:
+            pathlib.Path(target).write_bytes(b"corrupted-image")
+
+        with mock.patch.object(validator.shutil, "copyfile", side_effect=corrupt_copy):
+            validator.copy_verified_image(
+                source,
+                destination,
+                source_root,
+                destination_root,
+                report,
+                "featured image",
+                True,
+            )
+
+        self.assertTrue(any("SHA-256 mismatch" in error for error in report.errors))
+
+
+class QuartoRenderSafetyTests(unittest.TestCase):
+    """Require article-only render inputs and reject internal documentation output."""
+
+    def setUp(self) -> None:
+        self.temporary_directory = tempfile.TemporaryDirectory()
+        self.root = pathlib.Path(self.temporary_directory.name)
+        (self.root / "_quarto.yml").write_text(quarto_config_text(), encoding="utf-8")
+
+    def tearDown(self) -> None:
+        self.temporary_directory.cleanup()
+
+    def test_render_allowlist_includes_articles_and_excludes_internal_markdown(self) -> None:
+        report = validator.ValidationReport()
+        render_inputs = validator.read_quarto_render_inputs(self.root, report)
+
+        self.assertEqual(render_inputs, ("articles.qmd", "articles/*.qmd"))
+        self.assertEqual(report.errors, [])
+
+        def is_rendered(path: str) -> bool:
+            candidate = pathlib.PurePosixPath(path)
+            return any(candidate.match(pattern) for pattern in render_inputs or ())
+
+        self.assertTrue(is_rendered("articles.qmd"))
+        self.assertTrue(is_rendered("articles/future-article.qmd"))
+        self.assertFalse(is_rendered("AGENTS.md"))
+        self.assertFalse(is_rendered("README.md"))
+        self.assertFalse(is_rendered("scripts/notes.md"))
+        self.assertFalse(is_rendered("tests/fixtures.md"))
+
+    def test_broad_render_configuration_is_rejected(self) -> None:
+        (self.root / "_quarto.yml").write_text(
+            "project:\n  render:\n    - '*.qmd'\n    - '*.md'\n",
+            encoding="utf-8",
+        )
+        report = validator.ValidationReport()
+
+        validator.validate_quarto_render_config(self.root, report)
+
+        self.assertTrue(any("project.render" in error for error in report.errors))
+
+    def test_internal_markdown_deployment_artifacts_are_rejected(self) -> None:
+        site_root = self.root / "_site"
+        site_root.mkdir()
+        (self.root / "AGENTS.md").write_text("Internal instructions\n", encoding="utf-8")
+        (site_root / "AGENTS.html").write_text("<p>Internal</p>\n", encoding="utf-8")
+        (site_root / "AGENTS_files").mkdir()
+        report = validator.ValidationReport()
+
+        validator.validate_no_internal_markdown_artifacts(self.root, site_root, report)
+
+        self.assertTrue(any("AGENTS.md" in error for error in report.errors))
+        self.assertTrue(any("AGENTS_files" in error for error in report.errors))
+
+
+class WindowsProcessTests(unittest.TestCase):
+    """Exercise Windows encoding and native-process behavior without rendering."""
+
+    repository_root = pathlib.Path(__file__).resolve().parents[1]
+    wrapper_path = repository_root / "publish_article.ps1"
+
+    @staticmethod
+    def powershell_literal(value: pathlib.Path | str) -> str:
+        """Quote a value as a PowerShell single-quoted string literal."""
+
+        return "'" + str(value).replace("'", "''") + "'"
+
+    def invoke_python_through_wrapper(self, child_source: str) -> tuple[subprocess.CompletedProcess[bytes], dict[str, object]]:
+        """Dot-source the wrapper and invoke Python through its process helper."""
+
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = pathlib.Path(temporary_directory)
+            child = root / "child.py"
+            runner = root / "runner.ps1"
+            result_path = root / "result.json"
+            child.write_text(child_source, encoding="utf-8")
+            runner.write_text(
+                ". "
+                + self.powershell_literal(self.wrapper_path)
+                + " -ArticlePath 'unused.qmd'\n"
+                + "$result = Invoke-NativeProcess "
+                + "-FilePath "
+                + self.powershell_literal(sys.executable)
+                + " -Arguments @("
+                + self.powershell_literal(child)
+                + ") -WorkingDirectory "
+                + self.powershell_literal(root)
+                + " -Utf8Python\n"
+                + "$payload = [ordered]@{\n"
+                + "  exit_code = $result.ExitCode\n"
+                + "  stdout_b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($result.StdOut))\n"
+                + "  stderr_b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($result.StdErr))\n"
+                + "} | ConvertTo-Json -Compress\n"
+                + "[IO.File]::WriteAllText("
+                + self.powershell_literal(result_path)
+                + ", $payload, [Text.UTF8Encoding]::new($false))\n",
+                encoding="utf-8-sig",
+            )
+            completed = subprocess.run(
+                [
+                    "powershell.exe",
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-File",
+                    str(runner),
+                ],
+                check=False,
+                capture_output=True,
+            )
+            result_text = result_path.read_text(encoding="utf-8") if result_path.exists() else ""
+            if completed.returncode != 0 or not result_text.strip():
+                self.fail(
+                    "PowerShell process harness failed.\nstdout:\n"
+                    + completed.stdout.decode(errors="replace")
+                    + "\nstderr:\n"
+                    + completed.stderr.decode(errors="replace")
+                )
+            payload = json.loads(result_text)
+            payload["stdout"] = base64.b64decode(payload["stdout_b64"]).decode("utf-8")
+            payload["stderr"] = base64.b64decode(payload["stderr_b64"]).decode("utf-8")
+            return completed, payload
+
+    def test_generator_console_falls_back_safely_under_cp1252(self) -> None:
+        raw = io.BytesIO()
+        stream = io.TextIOWrapper(raw, encoding="cp1252", write_through=True)
+        with mock.patch.object(generate_articles.sys, "stdout", stream), mock.patch.object(
+            generate_articles.sys, "stderr", stream
+        ):
+            generate_articles.configure_console_streams()
+            stream.write("status: \u2705\n")
+            stream.flush()
+            self.assertIn(b"\\u2705", raw.getvalue())
+
+    def test_generator_source_status_output_is_ascii_safe(self) -> None:
+        source = pathlib.Path(generate_articles.__file__).read_text(encoding="utf-8")
+        source.encode("ascii")
+
+    def test_utf8_child_environment_and_generator_stderr_with_zero_exit(self) -> None:
+        completed, payload = self.invoke_python_through_wrapper(
+            "import os, sys\n"
+            "print(os.environ.get('PYTHONUTF8', '') + '|' + "
+            "os.environ.get('PYTHONIOENCODING', '') + '|\u2713')\n"
+            "print('warning \u2713', file=sys.stderr)\n"
+        )
+
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode(errors="replace"))
+        self.assertEqual(payload["exit_code"], 0)
+        self.assertIn("1|utf-8|\u2713", payload["stdout"])
+        self.assertIn("warning \u2713", payload["stderr"])
+
+    def test_generator_stderr_with_nonzero_exit_is_preserved(self) -> None:
+        completed, payload = self.invoke_python_through_wrapper(
+            "import sys\nprint('fatal diagnostic', file=sys.stderr)\nsys.exit(7)\n"
+        )
+
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode(errors="replace"))
+        self.assertEqual(payload["exit_code"], 7)
+        self.assertIn("fatal diagnostic", payload["stderr"])
+
 
 class CommandContractTests(unittest.TestCase):
     """Verify JSON status and process exit semantics used by PowerShell."""
@@ -262,6 +468,7 @@ class CommandContractTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temporary_directory = tempfile.TemporaryDirectory()
         self.root = pathlib.Path(self.temporary_directory.name)
+        (self.root / "_quarto.yml").write_text(quarto_config_text(), encoding="utf-8")
         (self.root / "articles").mkdir()
         (self.root / "images").mkdir()
         (self.root / "images" / "featured.png").write_bytes(b"featured")

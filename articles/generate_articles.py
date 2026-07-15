@@ -1,9 +1,20 @@
 import os
 import shutil
+import subprocess
+import sys
 import yaml
 import re
-from datetime import datetime
-from typing import Dict, List
+from typing import Dict
+
+
+def configure_console_streams() -> None:
+    """Avoid encoding failures when invoked directly from Windows PowerShell."""
+
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(errors="backslashreplace")
+
 
 class ArticleManager:
     def __init__(self):
@@ -18,7 +29,7 @@ class ArticleManager:
 
     def validate_environment(self) -> bool:
         if not os.path.exists(self.ARTICLES_QMD_PATH):
-            print(f"⚠️ Error: '{self.ARTICLES_QMD_PATH}' not found.")
+            print(f"ERROR: '{self.ARTICLES_QMD_PATH}' not found.", file=sys.stderr)
             return False
         if not os.path.exists(self.ARTICLES_DIR):
             os.makedirs(self.ARTICLES_DIR)
@@ -36,8 +47,8 @@ class ArticleManager:
                 raise ValueError("Invalid YAML front matter format")
             metadata_str = content[start + 3:end].strip()
             return yaml.safe_load(metadata_str) or {}
-        except Exception as e:
-            print(f"⚠️ Error parsing metadata in {file_path}: {str(e)}")
+        except Exception as error:
+            print(f"ERROR: Error parsing metadata in {file_path}: {error}", file=sys.stderr)
             return {}
 
     def slugify(self, text: str) -> str:
@@ -64,7 +75,10 @@ class ArticleManager:
         for article in featured_articles:
             image = article.get('image', '').strip()
             if not image:
-                print(f"⚠️ Warning: No image specified for '{article.get('title', '')}'")
+                print(
+                    f"WARNING: No image specified for '{article.get('title', '')}'",
+                    file=sys.stderr,
+                )
             featured_html += f"""
             <article class="article featured">
                 <img src="{image}" alt="{article.get('title', '')}"
@@ -88,52 +102,63 @@ class ArticleManager:
         if os.path.exists(self.SITE_ARTICLES_DIR):
             shutil.rmtree(self.SITE_ARTICLES_DIR)
             os.makedirs(self.SITE_ARTICLES_DIR)
-            print("✅ Cleaned old articles from _site/articles/")
+            print("OK: Cleaned old articles from _site/articles/")
 
     def process_articles(self):
         if not self.validate_environment():
-            return
+            return 1
+
+        exit_code = 0
         try:
             shutil.copyfile(self.ARTICLES_QMD_PATH, self.ARTICLES_QMD_BACKUP)
-            print("✅ Backup created successfully")
-            
+            print("OK: Backup created")
+
             with open(self.ARTICLES_QMD_PATH, "r", encoding="utf-8") as file:
                 content = file.read()
             featured_html = self.generate_featured_articles()
-            
             new_content = content.replace("{{featured_articles}}", featured_html)
-            
+
             with open(self.ARTICLES_QMD_PATH, "w", encoding="utf-8") as file:
                 file.write(new_content)
-            print("✅ Placeholders replaced successfully in articles.qmd!")
-            
+            print("OK: Placeholders replaced in articles.qmd")
+
             self.clean_old_articles()
-            
-            os.system("quarto render --no-execute")
-            print("✅ Quarto rendering completed!")
+            completed = subprocess.run(
+                ["quarto", "render", "--no-execute"],
+                cwd=os.path.dirname(self.ARTICLES_QMD_PATH),
+                check=False,
+            )
+            if completed.returncode != 0:
+                print(
+                    f"ERROR: Quarto rendering failed with exit code {completed.returncode}.",
+                    file=sys.stderr,
+                )
+                exit_code = completed.returncode or 1
+            else:
+                print("OK: Quarto rendering completed")
 
             site_articles_path = os.path.join(self.SITE_DIR, "articles.html")
-
-            if os.path.exists(site_articles_path):
-                print("✅ articles.html is correctly generated in _site/")
-            else:
-                print("⚠️ Error: articles.html was not found in _site/")
-
-        except Exception as e:
-            print(f"⚠️ Error during processing: {str(e)}")
-            if os.path.exists(self.ARTICLES_QMD_BACKUP):
-                shutil.move(self.ARTICLES_QMD_BACKUP, self.ARTICLES_QMD_PATH)
-                print("✅ Restored backup due to error")
-            return
+            if not os.path.exists(site_articles_path):
+                print("ERROR: articles.html was not found in _site/", file=sys.stderr)
+                exit_code = exit_code or 1
+            elif exit_code == 0:
+                print("OK: articles.html generated in _site/")
+        except Exception as error:
+            print(f"ERROR: Error during processing: {error}", file=sys.stderr)
+            exit_code = 1
         finally:
             if os.path.exists(self.ARTICLES_QMD_BACKUP):
-                shutil.move(self.ARTICLES_QMD_BACKUP, self.ARTICLES_QMD_PATH)
-                print("✅ Restored original articles.qmd after rendering")
+                try:
+                    shutil.move(self.ARTICLES_QMD_BACKUP, self.ARTICLES_QMD_PATH)
+                    print("OK: Restored original articles.qmd")
+                except Exception as error:
+                    print(f"ERROR: Could not restore articles.qmd: {error}", file=sys.stderr)
+                    exit_code = 1
+
+        return exit_code
+
 
 if __name__ == "__main__":
+    configure_console_streams()
     manager = ArticleManager()
-    manager.process_articles()
-
-
-
-
+    raise SystemExit(manager.process_articles())

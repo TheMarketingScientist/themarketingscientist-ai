@@ -26,25 +26,37 @@ This repository publishes the article section of **The Marketing Scientist** web
 - Source images: `images/**`.
 - Article styles: `article.css` and `style.css`.
 - Quarto configuration: `_quarto.yml`.
+- Intended Quarto render inputs: `articles.qmd` and direct children matching `articles/*.qmd` only.
 - Generated article output: `_site/articles.html`, `_site/articles/**`, `_site/articles_files/**`, and `_site/images/**`.
 - Other deployable generated resources may include `_site/article.css`, `_site/style.css`, and `_site/CNAME`.
 - Ignored Quarto state: `.quarto/**`.
 
 ## Automation architecture
 
-- `publish_article.ps1` is the thin Windows orchestration and Git-safety layer. It verifies the repository root, exact `GH_Pages` branch, tools, staged and unrelated changes; consumes validator JSON; invokes the existing generator only after source validation; checks post-generation Git state; and stops before staging.
-- `scripts/article_validator.py` owns QMD inspection, metadata and image validation, Editorial/Computational classification, rendered HTML/CSS/link/math validation, deployable local-image synchronization, and `articles.qmd` restoration checks. It never rewrites article QMD content.
+- `publish_article.ps1` is the thin Windows orchestration and Git-safety layer. It verifies the repository root, exact `GH_Pages` branch, tools, staged and unrelated changes; consumes validator JSON; invokes the existing generator only after source validation; checks post-generation Git state; and stops before staging. It invokes Python child processes with UTF-8 standard streams and captures stdout, stderr, and exit codes independently so ordinary native stderr does not become a PowerShell terminating error.
+- `scripts/article_validator.py` owns QMD inspection, metadata and image validation, Editorial/Computational classification, post-render deployable-image synchronization, and read-only rendered HTML/CSS/link/math validation. It never rewrites article QMD content.
 - `tests/test_article_validator.py` uses `unittest` and temporary directories outside the repository for parser and rendered-artifact fixtures.
 
-The validator exposes three JSON-producing modes:
+`_quarto.yml` must retain an explicit `project.render` allowlist containing exactly:
+
+```yaml
+render:
+  - articles.qmd
+  - "articles/*.qmd"
+```
+
+Do not broaden this allowlist. In particular, never render `AGENTS.md`, README files, `scripts/**`, `tests/**`, or other repository documentation/infrastructure into `_site/`. Rendered validation treats HTML or resource bundles derived from repository `.md` files as a hard failure.
+
+The validator exposes four JSON-producing modes:
 
 ```powershell
 python -B scripts/article_validator.py classify --repo-root . --article articles/my-new-article.qmd
 python -B scripts/article_validator.py source --repo-root . --article articles/my-new-article.qmd
+python -B scripts/article_validator.py sync-images --repo-root . --article articles/my-new-article.qmd
 python -B scripts/article_validator.py rendered --repo-root . --article articles/my-new-article.qmd --template-sha256 <sha256>
 ```
 
-Every mode returns `status`, `classification`, `errors`, `warnings`, `source_images`, `generated_assets`, `expected_article_slug`, and `detected_executable_indicators`. Exit code `0` means validation passed; any nonzero exit means a hard validation failure. Warnings do not change a successful exit code. The PowerShell entry point is the supported publication command; do not invoke rendered validation with image synchronization as a substitute for the guarded workflow.
+Every mode returns `status`, `classification`, `errors`, `warnings`, `source_images`, `generated_assets`, `expected_article_slug`, and `detected_executable_indicators`. Exit code `0` means validation passed; any nonzero exit means a hard validation failure. Warnings do not change a successful exit code. The PowerShell entry point is the supported publication command. Its required order is source validation, generation, `sync-images`, and then read-only `rendered` validation; do not use image synchronization as a substitute for the guarded workflow.
 
 ## Article naming and YAML conventions
 
@@ -156,7 +168,9 @@ For a new article, use the guarded publication wrapper instead of invoking the g
 powershell -ExecutionPolicy Bypass -File .\publish_article.ps1 -ArticlePath .\articles\my-new-article.qmd
 ```
 
-The wrapper validates the source, classifies it as Editorial or Computational, runs the existing generator only for Editorial content, ensures required local images are copied into deployable `_site/images/`, verifies the generated listing and article page, and reports the prospective staging set. It never stages, commits, pushes, changes branches, rewrites QMD content, or executes article code.
+The wrapper validates the source, classifies it as Editorial or Computational, runs the existing generator only for Editorial content, synchronizes required local images into deployable `_site/images/` after successful rendering, verifies SHA-256 equality, validates the generated listing and article page, and reports the prospective staging set. It never stages, commits, pushes, changes branches, rewrites QMD content, or executes article code. Python is launched with `PYTHONUTF8=1` and `PYTHONIOENCODING=utf-8` for the child process only. The generator also keeps its own status messages ASCII-safe for direct Windows PowerShell 5.1 invocation.
+
+Pre-existing changes under `_site/**` are related generated state, including residue from a failed render, so the wrapper warns, regenerates them, and validates the result. Existing changes outside the target article, its validated source images, the explicitly recognized workflow files during a controlled self-test, and `_site/**` remain unrelated and cause a hard preflight failure.
 
 Run non-mutating validator QA with bytecode writing disabled:
 
@@ -171,7 +185,7 @@ python -B -c "from pathlib import Path; [compile(Path(p).read_text(encoding='utf
 
 1. Temporarily creates `articles.qmd.bak` and expands the `{{featured_articles}}` placeholder in `articles.qmd`.
 2. Deletes and recreates `_site/articles/`.
-3. Runs `quarto render --no-execute`.
+3. Runs `quarto render --no-execute` and returns Quarto's nonzero exit code on failure.
 4. Restores the original `articles.qmd`; `articles.qmd.bak` should not remain after success.
 
 A valid generation may change or recreate:
@@ -186,7 +200,9 @@ A valid generation may change or recreate:
 - `_site/CNAME`
 - ignored `.quarto/**`
 
-The safe wrapper may copy featured and local body source images from `images/**` to `_site/images/**` when Quarto did not copy them. It must verify the copied bytes, must not rewrite the generated HTML to hide invalid paths, and must not leave a changed `articles.qmd` or an `articles.qmd.bak` file.
+Generation must not create `_site/AGENTS.html`, `_site/AGENTS_files/**`, README-derived pages, or any other HTML derived from repository-internal Markdown.
+
+After a successful render, the safe wrapper copies featured and local body source images from `images/**` to corresponding paths under `_site/images/**` only when the destination is missing or its content differs. It preserves image subdirectories and verifies source and destination SHA-256 hashes. Any copy or hash failure is fatal. It must not rewrite the generated HTML to hide invalid paths and must not leave a changed `articles.qmd` or an `articles.qmd.bak` file.
 
 ## Required checks before publication
 
@@ -199,17 +215,20 @@ Before considering an article ready to stage:
 5. Confirm the date uses `YYYY-MM-DD` and is a valid calendar date.
 6. Confirm the featured image and every local body image exist under `images/`, including inline, attributed, reference-style, and HTML image syntax.
 7. Classify the article. Stop on Computational content, list the indicators, and obtain explicit user authorization before any separately designed code-execution workflow.
-8. For an Editorial article, run `python articles/generate_articles.py` from the repository root and treat any nonzero exit or reported error as failure.
-9. Confirm `_site/articles.html` exists.
-10. Confirm `_site/articles/<slug>.html` exists and is linked from `_site/articles.html`.
-11. Confirm every featured image and local body image exists in deployable output, matches its source image, and is referenced by generated HTML at that deployed path.
-12. Confirm `article.css` and every other local stylesheet referenced by the generated article exist in `_site/**`.
-13. Check local links and anchors where practical. Treat separately deployed homepage links and otherwise inconclusive checks as warnings rather than false failures.
-14. If source math was detected, confirm rendered math markup or MathJax/KaTeX support; warn and require visual inspection if the result is inconclusive.
-15. Confirm no `articles.qmd.bak` remains and `articles.qmd` was restored byte-for-byte.
-16. Confirm generation changed only the intended article, its referenced source images, and `_site/**`.
-17. Review every warning, `git status --short`, `git diff --stat`, and the exact prospective staging list.
-18. Inspect the rendered pages locally before requesting permission to stage or publish.
+8. Confirm `_quarto.yml` allows exactly `articles.qmd` and `articles/*.qmd`, excluding every Markdown infrastructure file.
+9. For an Editorial article, run `python articles/generate_articles.py` from the repository root with child-process UTF-8 enabled. Capture stdout, stderr, and the native exit code explicitly; display stderr, and treat every nonzero exit as failure.
+10. After a successful render, synchronize all validated featured and body images to matching paths under `_site/images/**`, copying only missing or different files and requiring matching SHA-256 hashes.
+11. Confirm `_site/articles.html` exists.
+12. Confirm `_site/articles/<slug>.html` exists and is linked from `_site/articles.html`.
+13. Confirm no repository-internal Markdown produced HTML or a resource bundle under `_site/**`.
+14. Confirm every featured image and local body image exists in deployable output, matches its source image, and is referenced by generated HTML at that deployed path.
+15. Confirm `article.css` and every other local stylesheet referenced by the generated article exist in `_site/**`.
+16. Check local links and anchors where practical. Treat separately deployed homepage links and otherwise inconclusive checks as warnings rather than false failures.
+17. If source math was detected, confirm rendered math markup or MathJax/KaTeX support; warn and require visual inspection if the result is inconclusive.
+18. Confirm no `articles.qmd.bak` remains and `articles.qmd` was restored byte-for-byte.
+19. Confirm generation changed only the intended article, its referenced source images, and `_site/**`.
+20. Review every warning, `git status --short`, `git diff --stat`, and the exact prospective staging list.
+21. Inspect the rendered pages locally before requesting permission to stage or publish.
 
 ## Git safety
 

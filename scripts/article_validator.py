@@ -3,8 +3,9 @@
 
 Source inspection is deliberately conservative. Quarto rendering remains the
 authoritative parser for rich Markdown and math syntax. This module never
-rewrites article QMD content; rendered validation may copy already-authorized
-local images into ``_site/images`` when ``--sync-images`` is requested.
+rewrites article QMD content. Its explicit ``sync-images`` mode copies
+already-validated local images into ``_site/images`` before the separate,
+read-only rendered validation.
 """
 
 from __future__ import annotations
@@ -14,6 +15,7 @@ import datetime as datetime_module
 import hashlib
 import html
 import json
+import os
 import pathlib
 import re
 import shutil
@@ -28,6 +30,7 @@ import yaml
 
 REQUIRED_METADATA = ("title", "date", "author", "featured", "image", "description")
 STRING_METADATA = ("title", "author", "image", "description")
+INTENDED_QUARTO_RENDER_INPUTS = ("articles.qmd", "articles/*.qmd")
 ARTICLE_NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*\.qmd$")
 FRONT_MATTER_PATTERN = re.compile(
     r"\A---\s*\r?\n(.*?)\r?\n---\s*(?:\r?\n|\Z)",
@@ -755,6 +758,38 @@ def source_image_record(
     }
 
 
+def read_quarto_render_inputs(
+    repo_root: pathlib.Path, report: ValidationReport
+) -> tuple[str, ...] | None:
+    """Read and normalize the explicit Quarto project render allowlist."""
+
+    config_path = repo_root / "_quarto.yml"
+    try:
+        config = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+    except (OSError, UnicodeError, yaml.YAMLError) as error:
+        report.add_error(f"Could not read Quarto configuration {config_path}: {error}")
+        return None
+    project = config.get("project") if isinstance(config, dict) else None
+    render = project.get("render") if isinstance(project, dict) else None
+    if not isinstance(render, list) or not all(isinstance(item, str) for item in render):
+        report.add_error("_quarto.yml project.render must be an explicit string allowlist")
+        return None
+    return tuple(item.replace("\\", "/") for item in render)
+
+
+def validate_quarto_render_config(repo_root: pathlib.Path, report: ValidationReport) -> None:
+    """Require the exact article-only Quarto render inputs."""
+
+    render_inputs = read_quarto_render_inputs(repo_root, report)
+    if render_inputs is None:
+        return
+    if render_inputs != INTENDED_QUARTO_RENDER_INPUTS:
+        report.add_error(
+            "_quarto.yml project.render must contain only "
+            f"{list(INTENDED_QUARTO_RENDER_INPUTS)}; found {list(render_inputs)}"
+        )
+
+
 def validate_source(
     repo_root: pathlib.Path,
     article_path: pathlib.Path,
@@ -767,6 +802,9 @@ def validate_source(
     article_path = article_path.resolve()
     report = ValidationReport(expected_article_slug=article_path.stem)
     if not validate_article_location(repo_root, article_path, report):
+        return report
+    validate_quarto_render_config(repo_root, report)
+    if report.errors:
         return report
 
     try:
@@ -973,7 +1011,9 @@ def copy_verified_image(
             report.add_error(f"{context} is missing from deployable output: {destination}")
             return
         if sha256_file(source) != sha256_file(destination):
-            report.add_error(f"{context} in deployable output does not match its source: {destination}")
+            report.add_error(
+                f"SHA-256 mismatch for {context} in deployable output: {destination}"
+            )
     except OSError as error:
         report.add_error(f"Could not verify {context}: {error}")
 
@@ -1130,14 +1170,149 @@ def validate_template_restoration(
         report.add_error("articles.qmd was not restored byte-for-byte after generation")
 
 
+def resolved_site_root(repo_root: pathlib.Path, report: ValidationReport) -> pathlib.Path | None:
+    """Return a generated-site root that cannot escape the repository."""
+
+    site_root = (repo_root / "_site").resolve()
+    try:
+        site_root.relative_to(repo_root.resolve())
+    except ValueError:
+        report.add_error(f"Generated site directory resolves outside the repository: {site_root}")
+        return None
+    if not site_root.is_dir():
+        report.add_error(f"Generated site directory is missing: {site_root}")
+        return None
+    return site_root
+
+
+def validate_no_internal_markdown_artifacts(
+    repo_root: pathlib.Path, site_root: pathlib.Path, report: ValidationReport
+) -> None:
+    """Reject deployable HTML or resource bundles derived from repository Markdown."""
+
+    excluded_directories = {".git", ".quarto", "_site"}
+    for directory, subdirectories, filenames in os.walk(repo_root):
+        subdirectories[:] = [
+            name for name in subdirectories if name not in excluded_directories
+        ]
+        directory_path = pathlib.Path(directory)
+        for filename in filenames:
+            if pathlib.Path(filename).suffix.casefold() != ".md":
+                continue
+            markdown_path = directory_path / filename
+            relative = markdown_path.relative_to(repo_root)
+            generated_html = site_root / relative.with_suffix(".html")
+            generated_files = generated_html.with_name(f"{generated_html.stem}_files")
+            if generated_html.exists():
+                report.add_error(
+                    f"Internal Markdown was rendered into deployable HTML: {relative.as_posix()} "
+                    f"-> {generated_html.relative_to(repo_root).as_posix()}"
+                )
+            if generated_files.exists():
+                report.add_error(
+                    f"Internal Markdown resources are present in deployable output: "
+                    f"{generated_files.relative_to(repo_root).as_posix()}"
+                )
+
+
+def deployment_image_records(
+    repo_root: pathlib.Path,
+    article_path: pathlib.Path,
+    site_root: pathlib.Path,
+    report: ValidationReport,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], pathlib.Path, pathlib.Path] | None:
+    """Collect featured and target-body images plus their authorized roots."""
+
+    featured_images = collect_featured_images(repo_root, report)
+    if report.errors:
+        return None
+    target_body_images = [item for item in report.source_images if item.get("role") == "body"]
+    source_images_root = repo_root / "images"
+    site_images_root = site_root / "images"
+    try:
+        site_images_root.resolve().relative_to(site_root)
+    except ValueError:
+        report.add_error(
+            f"Deployable image directory resolves outside the generated site: {site_images_root.resolve()}"
+        )
+        return None
+    return featured_images, target_body_images, source_images_root, site_images_root
+
+
+def check_deployment_images(
+    repo_root: pathlib.Path,
+    article_path: pathlib.Path,
+    report: ValidationReport,
+    records: tuple[list[dict[str, Any]], list[dict[str, Any]], pathlib.Path, pathlib.Path],
+    *,
+    sync_images: bool,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Synchronize or verify every deployment image with SHA-256 checks."""
+
+    featured_images, target_body_images, source_images_root, site_images_root = records
+    for item in featured_images + target_body_images:
+        source = repo_root / item["source_path"]
+        destination = repo_root / item["deploy_path"]
+        label = (
+            f"Featured image for {item.get('article', article_path.name)}"
+            if item["role"] == "featured"
+            else f"{item['syntax']} at body line {item['line']}"
+        )
+        errors_before = len(report.errors)
+        copy_verified_image(
+            source,
+            destination,
+            source_images_root,
+            site_images_root,
+            report,
+            label,
+            sync_images,
+        )
+        if (
+            len(report.errors) == errors_before
+            and destination.is_file()
+            and sha256_file(source) == sha256_file(destination)
+        ):
+            report.add_generated_asset(destination, "image", repo_root)
+    return featured_images, target_body_images
+
+
+def synchronize_images(repo_root: pathlib.Path, article_path: pathlib.Path) -> ValidationReport:
+    """Copy changed deployment images after rendering and verify their hashes."""
+
+    repo_root = repo_root.resolve()
+    article_path = article_path.resolve()
+    report = validate_source(repo_root, article_path, fail_on_computational=False)
+    if report.classification == "Computational":
+        report.add_error(
+            "Image synchronization does not authorize Computational article execution; use a "
+            "separately approved workflow"
+        )
+    if report.errors:
+        return report
+
+    site_root = resolved_site_root(repo_root, report)
+    if site_root is None:
+        return report
+    records = deployment_image_records(repo_root, article_path, site_root, report)
+    if records is None:
+        return report
+    check_deployment_images(
+        repo_root,
+        article_path,
+        report,
+        records,
+        sync_images=True,
+    )
+    return report
+
+
 def validate_rendered(
     repo_root: pathlib.Path,
     article_path: pathlib.Path,
     template_sha256: str,
-    *,
-    sync_images: bool = False,
 ) -> ValidationReport:
-    """Validate generated pages and deployable assets after an authorized render."""
+    """Validate generated pages and already-synchronized deployment assets."""
 
     repo_root = repo_root.resolve()
     article_path = article_path.resolve()
@@ -1152,12 +1327,10 @@ def validate_rendered(
     if report.errors:
         return report
 
-    site_root = (repo_root / "_site").resolve()
-    try:
-        site_root.relative_to(repo_root)
-    except ValueError:
-        report.add_error(f"Generated site directory resolves outside the repository: {site_root}")
+    site_root = resolved_site_root(repo_root, report)
+    if site_root is None:
         return report
+    validate_no_internal_markdown_artifacts(repo_root, site_root, report)
     index_path = site_root / "articles.html"
     article_html = site_root / "articles" / f"{report.expected_article_slug}.html"
     if not index_path.is_file():
@@ -1192,38 +1365,16 @@ def validate_rendered(
             f"Generated article index does not link to 'articles/{report.expected_article_slug}.html'"
         )
 
-    featured_images = collect_featured_images(repo_root, report)
-    if report.errors:
+    records = deployment_image_records(repo_root, article_path, site_root, report)
+    if records is None:
         return report
-    target_body_images = [item for item in report.source_images if item.get("role") == "body"]
-    source_images_root = repo_root / "images"
-    site_images_root = site_root / "images"
-    try:
-        site_images_root.resolve().relative_to(site_root)
-    except ValueError:
-        report.add_error(
-            f"Deployable image directory resolves outside the generated site: {site_images_root.resolve()}"
-        )
-        return report
-    for item in featured_images + target_body_images:
-        source = repo_root / item["source_path"]
-        destination = repo_root / item["deploy_path"]
-        label = (
-            f"Featured image for {item.get('article', article_path.name)}"
-            if item["role"] == "featured"
-            else f"{item['syntax']} at body line {item['line']}"
-        )
-        copy_verified_image(
-            source,
-            destination,
-            source_images_root,
-            site_images_root,
-            report,
-            label,
-            sync_images,
-        )
-        if destination.is_file():
-            report.add_generated_asset(destination, "image", repo_root)
+    featured_images, target_body_images = check_deployment_images(
+        repo_root,
+        article_path,
+        report,
+        records,
+        sync_images=False,
+    )
 
     index_image_paths = local_reference_paths(
         index_inspection.image_refs,
@@ -1277,7 +1428,7 @@ def build_argument_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    for command in ("source", "classify"):
+    for command in ("source", "classify", "sync-images"):
         subparser = subparsers.add_parser(command)
         subparser.add_argument("--repo-root", required=True, type=pathlib.Path)
         subparser.add_argument("--article", required=True, type=pathlib.Path)
@@ -1286,7 +1437,6 @@ def build_argument_parser() -> argparse.ArgumentParser:
     rendered.add_argument("--repo-root", required=True, type=pathlib.Path)
     rendered.add_argument("--article", required=True, type=pathlib.Path)
     rendered.add_argument("--template-sha256", required=True)
-    rendered.add_argument("--sync-images", action="store_true")
     return parser
 
 
@@ -1297,11 +1447,12 @@ def run_command(arguments: argparse.Namespace) -> ValidationReport:
         return classify_article(arguments.repo_root, arguments.article)
     if arguments.command == "source":
         return validate_source(arguments.repo_root, arguments.article)
+    if arguments.command == "sync-images":
+        return synchronize_images(arguments.repo_root, arguments.article)
     return validate_rendered(
         arguments.repo_root,
         arguments.article,
         arguments.template_sha256,
-        sync_images=arguments.sync_images,
     )
 
 
