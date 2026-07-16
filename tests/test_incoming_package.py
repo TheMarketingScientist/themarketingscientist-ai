@@ -283,6 +283,33 @@ class IncomingPackageTests(unittest.TestCase):
         self.assertEqual(after, before)
         self.assertTrue(package.is_dir())
 
+    def test_custom_gpt_cta_sentence_survives_import_exactly(self) -> None:
+        package = self.create()
+        sentence = b"Is your executive measurement decision supported by causal evidence?"
+        cta = (
+            b'```{=html}\n<section class="article-cta">\n'
+            b'  <p class="article-cta-question"><strong>'
+            + sentence
+            + b"</strong></p>\n"
+            b'  <p class="article-cta-description">\n'
+            b"    I advise executives on measurement strategy, marketing economics, and Marketing Science product and vendor decisions.\n"
+            b"  </p>\n"
+            b'  <a class="article-cta-button" href="https://calendly.com/andres-themarketingscientist/some-context" target="_blank" rel="noopener noreferrer">\n'
+            b"    Schedule a call\n"
+            b"  </a>\n"
+            b"</section>\n"
+            b'<div class="connect-section">LinkedIn</div>\n```\n'
+        )
+        (package / "article.qmd").write_bytes(qmd_bytes() + cta)
+        self.write_image(package, "hero.png")
+
+        report = incoming.import_package(self.root, package)
+
+        self.assertEqual(report.status, "passed", report.errors)
+        imported = (self.root / "articles" / "pricing-vs-cac.qmd").read_bytes()
+        self.assertEqual(imported.count(sentence), 1)
+        self.assertIn(cta.replace(b'{{image:featured}}', b'../images/pricing-vs-cac-thumbnail.png'), imported)
+
     def test_create_mode_has_no_git_or_render_activity(self) -> None:
         with (
             mock.patch.object(subprocess, "run") as run,

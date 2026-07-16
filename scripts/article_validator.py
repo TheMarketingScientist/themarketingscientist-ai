@@ -31,6 +31,13 @@ import yaml
 REQUIRED_METADATA = ("title", "date", "author", "featured", "image", "description")
 STRING_METADATA = ("title", "author", "image", "description")
 INTENDED_QUARTO_RENDER_INPUTS = ("articles.qmd", "articles/*.qmd")
+ARTICLE_CTA_DESCRIPTION = (
+    "I advise executives on measurement strategy, marketing economics, and Marketing Science "
+    "product and vendor decisions."
+)
+ARTICLE_CTA_BUTTON_LABEL = "Schedule a call"
+ARTICLE_CTA_URL = "https://calendly.com/andres-themarketingscientist/some-context"
+ARTICLE_CTA_OPT_OUT_FIELD = "article-cta"
 ARTICLE_NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*\.qmd$")
 FRONT_MATTER_PATTERN = re.compile(
     r"\A---\s*\r?\n(.*?)\r?\n---\s*(?:\r?\n|\Z)",
@@ -131,6 +138,27 @@ class ArticleInspection:
     execution_indicators: list[dict[str, Any]]
     classification: str
     structural_errors: list[str]
+    cta: "CtaInspection"
+
+
+@dataclass
+class HtmlElement:
+    """Small HTML tree node used for structural CTA checks."""
+
+    tag: str
+    attrs: dict[str, str]
+    line: int
+    children: list[Any] = field(default_factory=list)
+    closed: bool = False
+    parent: "HtmlElement | None" = field(default=None, repr=False)
+
+
+@dataclass
+class CtaInspection:
+    """Article CTA elements discovered in source or rendered HTML."""
+
+    root: HtmlElement
+    blocks: list[HtmlElement]
 
 
 @dataclass
@@ -142,6 +170,7 @@ class HtmlInspection:
     links: list[dict[str, Any]]
     anchors: set[str]
     math_signals: set[str]
+    cta: CtaInspection
 
 
 def repo_relative(path: pathlib.Path, repo_root: pathlib.Path) -> str:
@@ -302,6 +331,282 @@ def mask_code_regions(body: str) -> tuple[str, list[dict[str, Any]], list[str]]:
     without_inline_code = mask_inline_code(without_fences)
     safe_body = HTML_CODE_PATTERN.sub(lambda match: blank_like(match.group(0)), without_inline_code)
     return safe_body, indicators, errors
+
+
+def source_html_for_validation(body: str) -> str:
+    """Expose raw HTML while masking display-only fenced and inline code examples."""
+
+    result: list[str] = []
+    opened: dict[str, Any] | None = None
+    preserve_contents = False
+    for line in body.splitlines(keepends=True):
+        candidate = line.rstrip("\r\n")
+        if opened is not None:
+            if closes_fence(candidate, opened["character"], opened["length"]):
+                result.append(blank_like(line))
+                opened = None
+                preserve_contents = False
+            else:
+                result.append(line if preserve_contents else blank_like(line))
+            continue
+
+        match = FENCE_PATTERN.match(candidate)
+        if not match:
+            result.append(line)
+            continue
+
+        fence = match.group("fence")
+        info = match.group("info").strip().casefold()
+        opened = {"character": fence[0], "length": len(fence)}
+        preserve_contents = info == "{=html}"
+        result.append(blank_like(line))
+
+    without_inline_code = mask_inline_code("".join(result))
+    return HTML_CODE_PATTERN.sub(lambda match: blank_like(match.group(0)), without_inline_code)
+
+
+VOID_HTML_ELEMENTS = {
+    "area",
+    "base",
+    "br",
+    "col",
+    "embed",
+    "hr",
+    "img",
+    "input",
+    "link",
+    "meta",
+    "param",
+    "source",
+    "track",
+    "wbr",
+}
+
+
+class HtmlTreeParser(HTMLParser):
+    """Build a minimal non-executing HTML tree for CTA structure and placement checks."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.root = HtmlElement("#document", {}, 1, closed=True)
+        self.stack = [self.root]
+
+    def add_element(
+        self, tag: str, attrs: list[tuple[str, str | None]], *, closed: bool
+    ) -> HtmlElement:
+        attributes = {name.casefold(): value or "" for name, value in attrs if name}
+        element = HtmlElement(
+            tag=tag.casefold(),
+            attrs=attributes,
+            line=self.getpos()[0],
+            closed=closed,
+            parent=self.stack[-1],
+        )
+        self.stack[-1].children.append(element)
+        return element
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        lowered = tag.casefold()
+        element = self.add_element(lowered, attrs, closed=lowered in VOID_HTML_ELEMENTS)
+        if lowered not in VOID_HTML_ELEMENTS:
+            self.stack.append(element)
+
+    def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self.add_element(tag, attrs, closed=True)
+
+    def handle_endtag(self, tag: str) -> None:
+        lowered = tag.casefold()
+        for offset in range(len(self.stack) - 1, 0, -1):
+            if self.stack[offset].tag == lowered:
+                self.stack[offset].closed = True
+                del self.stack[offset:]
+                return
+
+    def handle_data(self, data: str) -> None:
+        self.stack[-1].children.append(data)
+
+
+def element_classes(element: HtmlElement) -> set[str]:
+    return set(element.attrs.get("class", "").split())
+
+
+def find_elements_with_class(root: HtmlElement, class_name: str) -> list[HtmlElement]:
+    matches: list[HtmlElement] = []
+    for child in root.children:
+        if not isinstance(child, HtmlElement):
+            continue
+        if class_name in element_classes(child):
+            matches.append(child)
+        matches.extend(find_elements_with_class(child, class_name))
+    return matches
+
+
+def significant_children(element: HtmlElement) -> list[Any]:
+    return [
+        child
+        for child in element.children
+        if isinstance(child, HtmlElement) or (isinstance(child, str) and child.strip())
+    ]
+
+
+def element_text(element: HtmlElement) -> str:
+    parts: list[str] = []
+    for child in element.children:
+        if isinstance(child, str):
+            parts.append(child)
+        else:
+            parts.append(element_text(child))
+    return "".join(parts).strip()
+
+
+def normalized_element_text(element: HtmlElement) -> str:
+    return " ".join(element_text(element).split())
+
+
+def inspect_cta_html(value: str) -> CtaInspection:
+    """Find standardized CTA blocks without executing or rewriting HTML."""
+
+    parser = HtmlTreeParser()
+    parser.feed(value)
+    return CtaInspection(
+        root=parser.root,
+        blocks=find_elements_with_class(parser.root, "article-cta"),
+    )
+
+
+def next_significant_sibling(element: HtmlElement) -> HtmlElement | str | None:
+    if element.parent is None:
+        return None
+    found = False
+    for sibling in element.parent.children:
+        if not found:
+            found = sibling is element
+            continue
+        if isinstance(sibling, HtmlElement) or (isinstance(sibling, str) and sibling.strip()):
+            return sibling
+    return None
+
+
+def cta_opted_out(metadata: dict[str, Any]) -> bool:
+    return metadata.get(ARTICLE_CTA_OPT_OUT_FIELD) is False
+
+
+def validate_article_cta(
+    metadata: dict[str, Any],
+    inspection: CtaInspection,
+    report: ValidationReport,
+    context: str,
+) -> None:
+    """Validate the single standardized CTA and its position before the LinkedIn footer."""
+
+    if cta_opted_out(metadata):
+        if inspection.blocks:
+            report.add_error(
+                f"{context} opts out with '{ARTICLE_CTA_OPT_OUT_FIELD}: false' but still "
+                "contains an article CTA block"
+            )
+        return
+
+    if len(inspection.blocks) != 1:
+        report.add_error(
+            f"{context} must contain exactly one '<section class=\"article-cta\">' block; "
+            f"found {len(inspection.blocks)}"
+        )
+        return
+
+    block = inspection.blocks[0]
+    if (
+        block.tag != "section"
+        or element_classes(block) != {"article-cta"}
+        or set(block.attrs) != {"class"}
+        or not block.closed
+    ):
+        report.add_error(
+            f"{context} article CTA must be a closed '<section class=\"article-cta\">' element"
+        )
+
+    children = significant_children(block)
+    valid_children = (
+        len(children) == 3
+        and all(isinstance(child, HtmlElement) for child in children)
+        and [child.tag for child in children] == ["p", "p", "a"]
+    )
+    if not valid_children:
+        report.add_error(
+            f"{context} article CTA must contain exactly the question paragraph, service "
+            "description paragraph, and call-scheduling link in that order"
+        )
+        return
+
+    question, description, button = children
+    if (
+        element_classes(question) != {"article-cta-question"}
+        or set(question.attrs) != {"class"}
+        or not question.closed
+    ):
+        report.add_error(f"{context} CTA question must use class 'article-cta-question'")
+    question_children = significant_children(question)
+    if (
+        len(question_children) != 1
+        or not isinstance(question_children[0], HtmlElement)
+        or question_children[0].tag != "strong"
+        or question_children[0].attrs
+        or not question_children[0].closed
+        or any(isinstance(child, HtmlElement) for child in question_children[0].children)
+    ):
+        report.add_error(f"{context} CTA question must contain exactly one '<strong>' element")
+        sentence = ""
+    else:
+        sentence = element_text(question_children[0])
+    if not sentence:
+        report.add_error(f"{context} CTA article-specific sentence must not be empty")
+    elif len(sentence.split()) > 25:
+        report.add_error(
+            f"{context} CTA article-specific sentence must contain no more than 25 words; "
+            f"found {len(sentence.split())}"
+        )
+
+    if (
+        element_classes(description) != {"article-cta-description"}
+        or set(description.attrs) != {"class"}
+        or not description.closed
+        or any(isinstance(child, HtmlElement) for child in description.children)
+    ):
+        report.add_error(f"{context} CTA service description must use class 'article-cta-description'")
+    if normalized_element_text(description) != ARTICLE_CTA_DESCRIPTION:
+        report.add_error(
+            f"{context} CTA service description must match the approved text exactly: "
+            f"{ARTICLE_CTA_DESCRIPTION}"
+        )
+
+    if (
+        element_classes(button) != {"article-cta-button"}
+        or set(button.attrs) != {"class", "href", "target", "rel"}
+        or not button.closed
+        or any(isinstance(child, HtmlElement) for child in button.children)
+    ):
+        report.add_error(f"{context} CTA link must use class 'article-cta-button'")
+    if normalized_element_text(button) != ARTICLE_CTA_BUTTON_LABEL:
+        report.add_error(
+            f"{context} CTA button label must be exactly '{ARTICLE_CTA_BUTTON_LABEL}'"
+        )
+    if button.attrs.get("href") != ARTICLE_CTA_URL:
+        report.add_error(f"{context} CTA href must be exactly '{ARTICLE_CTA_URL}'")
+    if button.attrs.get("target") != "_blank":
+        report.add_error(f"{context} CTA link must include target=\"_blank\"")
+    if set(button.attrs.get("rel", "").split()) != {"noopener", "noreferrer"}:
+        report.add_error(f"{context} CTA link must include rel=\"noopener noreferrer\"")
+
+    following = next_significant_sibling(block)
+    if (
+        not isinstance(following, HtmlElement)
+        or following.tag != "div"
+        or "connect-section" not in element_classes(following)
+    ):
+        report.add_error(
+            f"{context} article CTA must appear immediately before the existing LinkedIn footer "
+            "'<div class=\"connect-section\">'"
+        )
 
 
 def markdown_unescape(value: str) -> str:
@@ -629,6 +934,7 @@ def inspect_article(article_path: pathlib.Path) -> ArticleInspection:
     text = article_path.read_text(encoding="utf-8")
     metadata, body = parse_front_matter(text)
     safe_body, cell_indicators, structural_errors = mask_code_regions(body)
+    cta = inspect_cta_html(source_html_for_validation(body))
     markdown_refs, markdown_errors = markdown_images(safe_body)
 
     html_parser = SourceImageParser()
@@ -658,6 +964,7 @@ def inspect_article(article_path: pathlib.Path) -> ArticleInspection:
             + markdown_errors
             + html_parser.errors
         ),
+        cta=cta,
     )
 
 
@@ -706,6 +1013,15 @@ def validate_metadata(metadata: dict[str, Any], report: ValidationReport) -> Non
 
     if "featured" in metadata and metadata["featured"] is not True:
         report.add_error("YAML field 'featured' must be the boolean true")
+
+    if (
+        ARTICLE_CTA_OPT_OUT_FIELD in metadata
+        and not isinstance(metadata[ARTICLE_CTA_OPT_OUT_FIELD], bool)
+    ):
+        report.add_error(
+            f"YAML field '{ARTICLE_CTA_OPT_OUT_FIELD}' must be a boolean; use false for an "
+            "explicit article-level CTA opt-out"
+        )
 
     if "date" not in metadata:
         return
@@ -848,6 +1164,7 @@ def validate_source(
     for error in inspection.structural_errors:
         report.add_error(error)
     validate_metadata(inspection.metadata, report)
+    validate_article_cta(inspection.metadata, inspection.cta, report, "Article source")
 
     for indicator in inspection.execution_indicators:
         if not indicator["requires_execution"]:
@@ -970,14 +1287,16 @@ class GeneratedHtmlParser(HTMLParser):
 def inspect_generated_html(path: pathlib.Path) -> HtmlInspection:
     """Parse generated HTML as text and return local-reference facts."""
 
+    text = path.read_text(encoding="utf-8")
     parser = GeneratedHtmlParser()
-    parser.feed(path.read_text(encoding="utf-8"))
+    parser.feed(text)
     return HtmlInspection(
         image_refs=parser.image_refs,
         stylesheets=parser.stylesheets,
         links=parser.links,
         anchors=parser.anchors,
         math_signals=parser.math_signals,
+        cta=inspect_cta_html(text),
     )
 
 
@@ -1443,6 +1762,12 @@ def validate_rendered(
 
     validate_stylesheets(article_html, article_inspection, site_root, repo_root, report)
     validate_internal_links(article_html, article_inspection, site_root, report)
+    try:
+        metadata, _ = parse_front_matter(article_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, ValueError) as error:
+        report.add_error(f"Could not re-read article CTA metadata: {error}")
+    else:
+        validate_article_cta(metadata, article_inspection.cta, report, "Generated article")
     if report.math["present"] and not article_inspection.math_signals:
         report.add_warning(
             "Source contains likely Quarto/Pandoc math, but generated HTML inspection could not "

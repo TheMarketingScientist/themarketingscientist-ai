@@ -72,6 +72,8 @@ The importer resolves image roles from explicit `package.yml` assignments, filen
 
 Successful import preserves the incoming package byte-for-byte, copies the QMD to `articles/<slug>.qmd`, copies images to article-specific names under `images/`, replaces only exact semantic placeholder bytes, and verifies every destination with SHA-256. It then continues through the existing source validation, classification, permitted Editorial render, image synchronization, rendered validation, and prospective staging report. Computational articles still stop before rendering. No incoming mode stages, commits, pushes, changes branches, or touches the homepage. After a later successful deployment, report that the preserved package may be archived or deleted, but never archive or delete it without explicit user approval.
 
+After an incoming package is imported, Codex must inspect the completed article for the standardized article CTA described below. Preserve a valid Custom GPT-supplied article-specific CTA sentence exactly. If the block is absent and the article has not explicitly opted out, generate only the article-specific opening sentence, insert the complete standardized block immediately before the existing LinkedIn footer, and leave every other article byte and formatting choice unchanged.
+
 `_quarto.yml` must retain an explicit `project.render` allowlist containing exactly:
 
 ```yaml
@@ -155,6 +157,33 @@ Validation is inspection-only. The publication wrapper must never rewrite, refor
 
 Do not validate math by counting dollar signs. Currency dollar signs such as `$100` and `$2.5M` remain ordinary text and must not be interpreted as math. Escaped dollar signs, fenced code blocks, inline code, raw code, and HTML `pre`, `code`, `script`, and `style` elements must not be modified during math validation. Source inspection only identifies likely standard Pandoc math spans; Quarto rendering is the authoritative syntax check. When likely math exists, rendered-output validation looks for math markup or MathJax/KaTeX support. An inconclusive markup check is a warning requiring visual review, not an automatic failure.
 
+## Standardized article CTA
+
+Every article must contain exactly one standardized CTA immediately before its existing LinkedIn footer unless the YAML front matter explicitly opts out with the boolean `article-cta: false`. Do not add a CTA when that opt-out is present. A CTA and an opt-out in the same article is a validation error.
+
+Use this exact structure, fixed service description, Calendly URL, link attributes, and button label:
+
+```html
+<section class="article-cta">
+  <p class="article-cta-question"><strong>ARTICLE-SPECIFIC CTA SENTENCE</strong></p>
+  <p class="article-cta-description">
+    I advise executives on measurement strategy, marketing economics, and Marketing Science product and vendor decisions.
+  </p>
+  <a
+    class="article-cta-button"
+    href="https://calendly.com/andres-themarketingscientist/some-context"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Schedule a call
+  </a>
+</section>
+```
+
+The Custom GPT normally supplies the article-specific opening sentence. Preserve it exactly when it is valid. If Codex must generate a fallback, write one concise sentence of no more than 25 words, normally as a question, tied directly to the article's central executive problem. Keep it specific, avoid promotional exaggeration, and do not repeat the fixed service description. CTA insertion must not rewrite article prose, headings, equations, captions, YAML, images, or formatting.
+
+Source and rendered validation must require exactly one valid block, immediate placement before `<div class="connect-section">`, a non-empty article-specific sentence of at most 25 whitespace-delimited words, exact fixed copy and button label, the exact Calendly URL, `target="_blank"`, and both `noopener` and `noreferrer` relationship tokens. The CTA must remain visible in the local rendered article before publication approval.
+
 ## Body image syntax and restrictions
 
 The validator supports these local image forms without treating attributes, captions, titles, or dimensions as part of the path:
@@ -236,6 +265,8 @@ A valid generation may change or recreate:
 - `_site/CNAME`
 - ignored `.quarto/**`
 
+When `article.css` changes, generation must copy the matching stylesheet to `_site/article.css`; both files belong in the prospective staging set when their content differs from `HEAD`.
+
 Generation must not create `_site/AGENTS.html`, `_site/AGENTS_files/**`, README-derived pages, or any other HTML derived from repository-internal Markdown.
 
 After a successful render, the safe wrapper copies featured and local body source images from `images/**` to corresponding paths under `_site/images/**` only when the destination is missing or its content differs. It preserves image subdirectories and verifies source and destination SHA-256 hashes. Any copy or hash failure is fatal. It must not rewrite the generated HTML to hide invalid paths and must not leave a changed `articles.qmd` or an `articles.qmd.bak` file.
@@ -252,19 +283,20 @@ Before considering an article ready to stage:
 6. Confirm the featured image and every local body image exist under `images/`, including inline, attributed, reference-style, and HTML image syntax.
 7. Classify the article. Stop on Computational content, list the indicators, and obtain explicit user authorization before any separately designed code-execution workflow.
 8. Confirm `_quarto.yml` allows exactly `articles.qmd` and `articles/*.qmd`, excluding every Markdown infrastructure file.
-9. For an Editorial article, run `python articles/generate_articles.py` from the repository root with child-process UTF-8 enabled. Capture stdout, stderr, and the native exit code explicitly; display stderr, and treat every nonzero exit as failure.
-10. After a successful render, synchronize all validated featured and body images to matching paths under `_site/images/**`, copying only missing or different files and requiring matching SHA-256 hashes.
-11. Confirm `_site/articles.html` exists.
-12. Confirm `_site/articles/<slug>.html` exists and is linked from `_site/articles.html`.
-13. Confirm no repository-internal Markdown produced HTML or a resource bundle under `_site/**`.
-14. Confirm every featured image and local body image exists in deployable output, matches its source image, and is referenced by generated HTML at that deployed path.
-15. Confirm `article.css` and every other local stylesheet referenced by the generated article exist in `_site/**`.
-16. Check local links and anchors where practical. Treat separately deployed homepage links and otherwise inconclusive checks as warnings rather than false failures.
-17. If source math was detected, confirm rendered math markup or MathJax/KaTeX support; warn and require visual inspection if the result is inconclusive.
-18. Confirm no `articles.qmd.bak` remains and `articles.qmd` was restored byte-for-byte.
-19. Confirm generation changed only the intended article, its referenced source images, and `_site/**`.
-20. Review every warning, `git status --short`, `git diff --stat`, and the exact prospective staging list.
-21. Inspect the rendered pages locally before requesting permission to stage or publish.
+9. Confirm the article contains exactly one valid standardized CTA immediately before the LinkedIn footer, or respects an explicit YAML `article-cta: false` opt-out.
+10. For an Editorial article, run `python articles/generate_articles.py` from the repository root with child-process UTF-8 enabled. Capture stdout, stderr, and the native exit code explicitly; display stderr, and treat every nonzero exit as failure.
+11. After a successful render, synchronize all validated featured and body images to matching paths under `_site/images/**`, copying only missing or different files and requiring matching SHA-256 hashes.
+12. Confirm `_site/articles.html` exists.
+13. Confirm `_site/articles/<slug>.html` exists and is linked from `_site/articles.html`.
+14. Confirm no repository-internal Markdown produced HTML or a resource bundle under `_site/**`.
+15. Confirm every featured image and local body image exists in deployable output, matches its source image, and is referenced by generated HTML at that deployed path.
+16. Confirm `article.css` and every other local stylesheet referenced by the generated article exist in `_site/**`.
+17. Check local links and anchors where practical. Treat separately deployed homepage links and otherwise inconclusive checks as warnings rather than false failures.
+18. If source math was detected, confirm rendered math markup or MathJax/KaTeX support; warn and require visual inspection if the result is inconclusive.
+19. Confirm no `articles.qmd.bak` remains and `articles.qmd` was restored byte-for-byte.
+20. Confirm generation changed only the intended article, its referenced source images, and `_site/**`.
+21. Review every warning, `git status --short`, `git diff --stat`, and the exact prospective staging list.
+22. Inspect the rendered pages locally before requesting permission to stage or publish.
 
 ## Approved publication batch
 

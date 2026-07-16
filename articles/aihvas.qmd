@@ -206,6 +206,21 @@ AI HVAs represent a **fundamental shift from traditional Lookalike Audiences** b
 ---
 
 ```{=html}
+<section class="article-cta">
+  <p class="article-cta-question"><strong>Deciding whether AI-powered high-value audiences can improve targeting across channels?</strong></p>
+  <p class="article-cta-description">
+    I advise executives on measurement strategy, marketing economics, and Marketing Science product and vendor decisions.
+  </p>
+  <a
+    class="article-cta-button"
+    href="https://calendly.com/andres-themarketingscientist/some-context"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Schedule a call
+  </a>
+</section>
+
 <div class="connect-section">
   <div class="linkedin-button">
     <a href="https://www.linkedin.com/in/themarketingscientist" target="_blank">

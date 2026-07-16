@@ -262,6 +262,21 @@ To ensure real adoption, **involving stakeholders early and aligning segmentatio
 ---
 
 ```{=html}
+<section class="article-cta">
+  <p class="article-cta-question"><strong>Struggling to build customer segments that are analytically sound and usable across the organization?</strong></p>
+  <p class="article-cta-description">
+    I advise executives on measurement strategy, marketing economics, and Marketing Science product and vendor decisions.
+  </p>
+  <a
+    class="article-cta-button"
+    href="https://calendly.com/andres-themarketingscientist/some-context"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Schedule a call
+  </a>
+</section>
+
 <div class="connect-section">
   <div class="linkedin-button">
     <a href="https://www.linkedin.com/in/themarketingscientist" target="_blank">

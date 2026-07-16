@@ -145,6 +145,21 @@ A regular review and adaptation of approach ensures alignment with changing mark
 
 
 ```{=html}
+<section class="article-cta">
+  <p class="article-cta-question"><strong>Trying to align AI transformation priorities with measurable business value?</strong></p>
+  <p class="article-cta-description">
+    I advise executives on measurement strategy, marketing economics, and Marketing Science product and vendor decisions.
+  </p>
+  <a
+    class="article-cta-button"
+    href="https://calendly.com/andres-themarketingscientist/some-context"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Schedule a call
+  </a>
+</section>
+
 <div class="connect-section">
   <div class="linkedin-button">
     <a href="https://www.linkedin.com/in/themarketingscientist" target="_blank">

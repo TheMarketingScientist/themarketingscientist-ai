@@ -178,7 +178,56 @@ body .site-header {
 }
 
 
-/* Add to your article.css */
+.article-cta {
+  margin: 3rem 0 1.5rem;
+  padding: 1.75rem 2rem;
+  background: rgba(75, 0, 130, 0.045);
+  border: 1px solid rgba(75, 0, 130, 0.14);
+  border-left: 4px solid var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(44, 44, 84, 0.08);
+}
+
+.article-cta .article-cta-question {
+  margin: 0 0 0.75rem;
+  color: var(--primary-color);
+  font-size: 1.15rem;
+  line-height: 1.45;
+  text-align: left !important;
+}
+
+.article-cta .article-cta-description {
+  margin: 0 0 1.25rem;
+  color: var(--text-color);
+  line-height: 1.65;
+  text-align: left !important;
+}
+
+.article-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.2rem;
+  background: var(--primary-color);
+  color: white !important;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.article-cta-button:hover {
+  background: var(--secondary-color);
+  color: white !important;
+  text-decoration: none;
+  box-shadow: 0 3px 8px rgba(40, 63, 121, 0.2);
+}
+
+.article-cta-button:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 3px;
+}
+
 .connect-section {
   margin-top: 40px;
   text-align: center;
@@ -201,4 +250,16 @@ body .site-header {
 .linkedin-button i {
   margin-right: 8px;
   color: white;
+}
+
+@media (max-width: 768px) {
+  .article-cta {
+    margin-top: 2.25rem;
+    padding: 1.35rem 1.25rem;
+  }
+
+  .article-cta-button {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }

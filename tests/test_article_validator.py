@@ -17,11 +17,61 @@ from articles import generate_articles
 from scripts import article_validator as validator
 
 
-def article_text(body: str, extra_yaml: str = "") -> str:
+def article_cta(
+    sentence: str = "Trying to solve the article's executive measurement problem?",
+    *,
+    description: str = validator.ARTICLE_CTA_DESCRIPTION,
+    href: str = validator.ARTICLE_CTA_URL,
+    label: str = validator.ARTICLE_CTA_BUTTON_LABEL,
+    target: str = "_blank",
+    rel: str = "noopener noreferrer",
+) -> str:
+    """Return the standardized raw HTML CTA followed by the LinkedIn footer."""
+
+    return (
+        "```{=html}\n"
+        '<section class="article-cta">\n'
+        f'  <p class="article-cta-question"><strong>{sentence}</strong></p>\n'
+        '  <p class="article-cta-description">\n'
+        f"    {description}\n"
+        "  </p>\n"
+        "  <a\n"
+        '    class="article-cta-button"\n'
+        f'    href="{href}"\n'
+        f'    target="{target}"\n'
+        f'    rel="{rel}"\n'
+        "  >\n"
+        f"    {label}\n"
+        "  </a>\n"
+        "</section>\n\n"
+        '<div class="connect-section">\n'
+        '  <div class="linkedin-button">\n'
+        '    <a href="https://www.linkedin.com/in/themarketingscientist" target="_blank">\n'
+        "      The Marketing Scientist\n"
+        "    </a>\n"
+        "  </div>\n"
+        "</div>\n"
+        "```\n"
+    )
+
+
+def linkedin_footer() -> str:
+    """Return the existing footer without a CTA for opt-out tests."""
+
+    return (
+        "```{=html}\n"
+        '<div class="connect-section">\n'
+        '  <div class="linkedin-button">LinkedIn</div>\n'
+        "</div>\n"
+        "```\n"
+    )
+
+
+def article_text(body: str, extra_yaml: str = "", *, include_cta: bool = True) -> str:
     """Build a minimal valid article without modifying repository fixtures."""
 
     extra = f"{extra_yaml.rstrip()}\n" if extra_yaml.strip() else ""
-    return (
+    article = (
         "---\n"
         'title: "Test article"\n'
         "author: Andres Acosta\n"
@@ -33,6 +83,11 @@ def article_text(body: str, extra_yaml: str = "") -> str:
         "---\n"
         f"{body}"
     )
+    if include_cta:
+        if article and not article.endswith("\n"):
+            article += "\n"
+        article += article_cta()
+    return article
 
 
 def quarto_config_text() -> str:
@@ -195,6 +250,99 @@ class SourceInspectionTests(unittest.TestCase):
         self.assertEqual(inspection.body_images, [])
         self.assertFalse(inspection.math["present"])
 
+    def validate_text(self, value: str) -> validator.ValidationReport:
+        self.article.write_text(value, encoding="utf-8")
+        return validator.validate_source(self.root, self.article)
+
+    def test_standardized_cta_is_present_and_valid(self) -> None:
+        report = self.validate_text(article_text("Article body.\n"))
+
+        self.assertEqual(report.status, "passed", report.errors)
+
+    def test_cta_must_appear_immediately_before_linkedin_footer(self) -> None:
+        block = article_cta().replace(
+            "</section>\n\n<div class=\"connect-section\">",
+            "</section>\n<p>Intervening content</p>\n<div class=\"connect-section\">",
+        )
+        report = self.validate_text(
+            article_text("Article body.\n", include_cta=False) + block
+        )
+
+        self.assertTrue(any("immediately before" in error for error in report.errors), report.errors)
+
+    def test_cta_service_description_must_match_fixed_copy(self) -> None:
+        block = article_cta(description="Different service description.")
+        report = self.validate_text(
+            article_text("Article body.\n", include_cta=False) + block
+        )
+
+        self.assertTrue(any("approved text exactly" in error for error in report.errors), report.errors)
+
+    def test_cta_calendly_url_must_match(self) -> None:
+        block = article_cta(href="https://example.com/not-calendly")
+        report = self.validate_text(
+            article_text("Article body.\n", include_cta=False) + block
+        )
+
+        self.assertTrue(any("CTA href must be exactly" in error for error in report.errors), report.errors)
+
+    def test_cta_button_label_must_match(self) -> None:
+        block = article_cta(label="Book now")
+        report = self.validate_text(
+            article_text("Article body.\n", include_cta=False) + block
+        )
+
+        self.assertTrue(any("button label must be exactly" in error for error in report.errors), report.errors)
+
+    def test_malformed_or_duplicate_cta_blocks_are_rejected(self) -> None:
+        malformed = article_cta(target="_self", rel="nofollow")
+        malformed_report = self.validate_text(
+            article_text("Article body.\n", include_cta=False) + malformed
+        )
+        self.assertTrue(any('target="_blank"' in error for error in malformed_report.errors))
+        self.assertTrue(any('rel="noopener noreferrer"' in error for error in malformed_report.errors))
+
+        duplicate_report = self.validate_text(
+            article_text("Article body.\n", include_cta=False)
+            + article_cta()
+            + article_cta("A second question?")
+        )
+        self.assertTrue(any("exactly one" in error for error in duplicate_report.errors))
+
+    def test_explicit_article_cta_opt_out_is_respected(self) -> None:
+        report = self.validate_text(
+            article_text(
+                "Article body.\n" + linkedin_footer(),
+                "article-cta: false",
+                include_cta=False,
+            )
+        )
+
+        self.assertEqual(report.status, "passed", report.errors)
+
+    def test_custom_gpt_sentence_is_preserved_byte_for_byte(self) -> None:
+        sentence = "Can your incrementality evidence support the executive investment decision?"
+        value = (
+            article_text("Article body.\n", include_cta=False)
+            + article_cta(sentence)
+        )
+        self.article.write_text(value, encoding="utf-8")
+        before = self.article.read_bytes()
+
+        report = validator.validate_source(self.root, self.article)
+
+        self.assertEqual(report.status, "passed", report.errors)
+        self.assertEqual(self.article.read_bytes(), before)
+        self.assertIn(sentence.encode("utf-8"), before)
+
+    def test_cta_sentence_cannot_exceed_twenty_five_words(self) -> None:
+        sentence = " ".join(f"word{number}" for number in range(1, 27))
+        report = self.validate_text(
+            article_text("Article body.\n", include_cta=False) + article_cta(sentence)
+        )
+
+        self.assertTrue(any("no more than 25 words" in error for error in report.errors))
+
 
 class GeneratedHtmlTests(unittest.TestCase):
     """Exercise generated HTML parsing and complete rendered validation."""
@@ -226,6 +374,23 @@ class GeneratedHtmlTests(unittest.TestCase):
         self.assertIn("result", inspection.anchors)
         self.assertEqual(inspection.math_signals, {"math markup", "MathJax script"})
 
+    def test_generated_html_cta_contract_is_validated(self) -> None:
+        html_path = self.root / "article.html"
+        rendered_cta = "\n".join(article_cta("Is the executive decision measurable?").splitlines()[1:-1])
+        html_path.write_text(f"<!doctype html><body>{rendered_cta}</body>", encoding="utf-8")
+        inspection = validator.inspect_generated_html(html_path)
+        report = validator.ValidationReport()
+
+        validator.validate_article_cta({}, inspection.cta, report, "Generated article")
+
+        self.assertEqual(report.status, "passed", report.errors)
+
+        missing_report = validator.ValidationReport()
+        validator.validate_article_cta(
+            {}, validator.inspect_cta_html("<p>No CTA</p>"), missing_report, "Generated article"
+        )
+        self.assertTrue(any("exactly one" in error for error in missing_report.errors))
+
     def test_featured_image_synchronization_and_rendered_assets(self) -> None:
         articles = self.root / "articles"
         images = self.root / "images"
@@ -243,6 +408,7 @@ class GeneratedHtmlTests(unittest.TestCase):
         (images / "body.png").write_bytes(b"body-image")
         template = self.root / "articles.qmd"
         template.write_text("{{featured_articles}}\n", encoding="utf-8")
+        rendered_cta = "\n".join(article_cta().splitlines()[1:-1])
 
         (site / "article.css").write_text(".article {}\n", encoding="utf-8")
         (site / "style.css").write_text("body {}\n", encoding="utf-8")
@@ -262,7 +428,7 @@ class GeneratedHtmlTests(unittest.TestCase):
             '<section id="equation"><span class="math inline">x^2</span>'
             '<img src="../images/body.png">'
             '<a href="#equation">Equation</a></section>'
-            "</body></html>",
+            f"{rendered_cta}</body></html>",
             encoding="utf-8",
         )
 
