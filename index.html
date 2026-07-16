@@ -128,6 +128,78 @@
             height: 20px;
             margin-right: 10px;
         }
+        .homepage-cta {
+            max-width: 680px;
+            margin: 1.25rem auto 0;
+        }
+        .homepage-cta-copy {
+            margin: 0 0 1rem;
+            color: #2C2C54;
+            text-align: left;
+        }
+        .homepage-cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            background-color: #4B0082;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .homepage-cta-button:hover {
+            background-color: #2C2C54;
+            box-shadow: 0 3px 8px rgba(44, 44, 84, 0.2);
+        }
+        .homepage-cta-button:focus-visible {
+            outline: 3px solid #FFD700;
+            outline-offset: 3px;
+        }
+        .homepage-advisory-cta {
+            max-width: 680px;
+            margin: 0.5rem auto 1.5rem;
+            text-align: center;
+        }
+        .homepage-advisory-cta .homepage-cta-copy {
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+        .homepage-advisory-cta .profile-photo {
+            margin: 1rem auto 0;
+        }
+        .homepage-cta-work-with-me {
+            max-width: none;
+            margin-top: 2rem;
+            padding: 1.5rem 1.75rem;
+            background: #FFFFFF;
+            border: 1px solid rgba(75, 0, 130, 0.14);
+            border-left: 4px solid #4B0082;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(44, 44, 84, 0.08);
+        }
+        .homepage-cta-work-with-me .homepage-cta-copy {
+            font-size: 1.05rem;
+        }
+        .work-with-me-linkedin {
+            margin-top: 1rem;
+            padding: 8px 16px;
+            font-size: 0.95rem;
+        }
+        @media (max-width: 600px) {
+            .homepage-advisory-cta {
+                padding: 0 0.25rem;
+            }
+            .homepage-cta-work-with-me .homepage-cta-button {
+                width: 100%;
+                box-sizing: border-box;
+                justify-content: center;
+            }
+            .homepage-cta-work-with-me {
+                padding: 1.25rem;
+            }
+        }
         footer {
             text-align: center;
             padding: 1rem;
@@ -153,7 +225,12 @@
 
     <section id="home" class="container">
         <h2>Independent Marketing Science, AI & Measurement Strategy Advisory</h2>
-        <img src="profile.jpg" alt="Andrés Acosta" class="profile-photo">
+
+        <div class="homepage-advisory-cta">
+            <p class="homepage-cta-copy">Have a measurement or marketing economics decision you need to work through?</p>
+            <a class="homepage-cta-button" href="https://calendly.com/andres-themarketingscientist/some-context" target="_blank" rel="noopener noreferrer">Schedule a call</a>
+            <img src="profile.jpg" alt="Andrés Acosta" class="profile-photo">
+        </div>
 
         <p>I'm Andrés Acosta, a Marketing Science and AI executive with over 15 years of experience helping organizations turn advanced analytics into better business decisions, better marketing investment strategies and commercial impact.</p>
 
@@ -229,7 +306,12 @@
 
         </ul>
 
-        <a href="https://www.linkedin.com/in/themarketingscientist/" target="_blank" class="linkedin-button">
+        <div class="homepage-cta homepage-cta-work-with-me">
+            <p class="homepage-cta-copy">Have a complex Marketing Science decision ahead? Let’s discuss the options, trade-offs and risks.</p>
+            <a class="homepage-cta-button" href="https://calendly.com/andres-themarketingscientist/some-context" target="_blank" rel="noopener noreferrer">Schedule a call</a>
+        </div>
+
+        <a href="https://www.linkedin.com/in/themarketingscientist/" target="_blank" class="linkedin-button work-with-me-linkedin">
             <img src="linkedin-icon.png" alt="The Marketing Scientist" class="linkedin-icon"> Connect on LinkedIn
         </a>
     </section>
