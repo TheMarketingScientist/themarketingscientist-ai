@@ -6,7 +6,10 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Marketing Scientist</title>
+    <title>The Marketing Scientist | Marketing Performance, Measurement &amp; Investment Advisory</title>
+    <meta name="description" content="Independent advisory helping executives improve profitable marketing performance and assess agencies, analytics, technology, AI, measurement claims and business cases before investing.">
+    <meta property="og:title" content="The Marketing Scientist | Marketing Performance, Measurement &amp; Investment Advisory">
+    <meta property="og:description" content="Independent advisory helping executives improve profitable marketing performance and assess agencies, analytics, technology, AI, measurement claims and business cases before investing.">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -128,15 +131,6 @@
             height: 20px;
             margin-right: 10px;
         }
-        .homepage-cta {
-            max-width: 680px;
-            margin: 1.25rem auto 0;
-        }
-        .homepage-cta-copy {
-            margin: 0 0 1rem;
-            color: #2C2C54;
-            text-align: left;
-        }
         .homepage-cta-button {
             display: inline-flex;
             align-items: center;
@@ -159,18 +153,14 @@
         }
         .homepage-advisory-cta {
             max-width: 680px;
-            margin: 0.5rem auto 1.5rem;
+            margin: 1.25rem auto 0;
             text-align: center;
         }
-        .homepage-advisory-cta .homepage-cta-copy {
-            margin-bottom: 0.75rem;
+        .homepage-advisory-cta p {
+            margin: 0 0 0.75rem;
             text-align: center;
-        }
-        .homepage-advisory-cta .profile-photo {
-            margin: 1rem auto 0;
         }
         .homepage-cta-work-with-me {
-            max-width: none;
             margin-top: 2rem;
             padding: 1.5rem 1.75rem;
             background: #FFFFFF;
@@ -179,25 +169,144 @@
             border-radius: 8px;
             box-shadow: 0 3px 10px rgba(44, 44, 84, 0.08);
         }
-        .homepage-cta-work-with-me .homepage-cta-copy {
+        .homepage-cta-work-with-me p {
+            margin: 0 0 1rem;
             font-size: 1.05rem;
+            text-align: left;
         }
-        .work-with-me-linkedin {
+        .hero-section {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .hero-section h2 {
+            margin: 0;
+            font-size: clamp(1.8rem, 4vw, 2.35rem);
+        }
+        .profile-section {
             margin-top: 1rem;
-            padding: 8px 16px;
-            font-size: 0.95rem;
         }
-        @media (max-width: 600px) {
-            .homepage-advisory-cta {
-                padding: 0 0.25rem;
+        .profile-section .profile-photo {
+            margin-bottom: 1.5rem;
+        }
+        .executive-questions {
+            display: grid;
+            gap: 0.85rem;
+            margin: 1.5rem 0;
+        }
+        .executive-question {
+            margin: 0;
+            padding: 1rem 1.25rem;
+            background: #FFFFFF;
+            border-left: 4px solid #4B0082;
+            border-radius: 6px;
+            box-shadow: 0 2px 7px rgba(44, 44, 84, 0.07);
+            text-align: left;
+        }
+        .services-list {
+            display: grid;
+            gap: 1.75rem;
+        }
+        .service-card {
+            padding: 1.75rem;
+            background: #FFFFFF;
+            border: 1px solid rgba(75, 0, 130, 0.14);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(44, 44, 84, 0.08);
+        }
+        .service-card h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.5rem;
+        }
+        .service-card h4 {
+            margin: 1.75rem 0 0.75rem;
+            color: #4B0082;
+            font-size: 1.15rem;
+        }
+        .service-card h5 {
+            margin: 0 0 0.5rem;
+            color: #4B0082;
+            font-size: 1rem;
+        }
+        .service-subtitle {
+            margin: 0 0 1.25rem;
+            color: #2C2C54;
+            font-size: 1.05rem;
+            font-weight: bold;
+            text-align: left;
+        }
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.85rem;
+        }
+        .evidence-level {
+            padding: 1rem;
+            background: rgba(75, 0, 130, 0.045);
+            border: 1px solid rgba(75, 0, 130, 0.12);
+            border-radius: 7px;
+        }
+        .evidence-level p {
+            margin: 0;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+        .coverage-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: 1.5rem;
+        }
+        .service-output {
+            margin: 1.5rem 0 0;
+            padding: 1rem 1.25rem;
+            background: rgba(40, 63, 121, 0.06);
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: left;
+        }
+        .work-path {
+            margin-top: 1.75rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(75, 0, 130, 0.14);
+        }
+        .work-path h3 {
+            margin-top: 0;
+        }
+        .start-decision {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #FFFFFF;
+            border-left: 4px solid #4B0082;
+            border-radius: 7px;
+            box-shadow: 0 3px 10px rgba(44, 44, 84, 0.07);
+        }
+        .start-decision h3 {
+            margin-top: 0;
+        }
+        .homepage-contact {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .homepage-contact .linkedin-button {
+            margin-top: 0;
+        }
+        @media (max-width: 680px) {
+            .service-card,
+            .start-decision {
+                padding: 1.25rem;
+            }
+            .evidence-grid,
+            .coverage-list {
+                grid-template-columns: 1fr;
+            }
+            .executive-question {
+                padding: 0.9rem 1rem;
+            }
+            .homepage-cta-work-with-me {
+                padding: 1.25rem;
             }
             .homepage-cta-work-with-me .homepage-cta-button {
                 width: 100%;
                 box-sizing: border-box;
-                justify-content: center;
-            }
-            .homepage-cta-work-with-me {
-                padding: 1.25rem;
             }
         }
         footer {
@@ -223,32 +332,111 @@
 
     <img src="updated-banner.jpg" alt="Updated Banner" class="banner">
 
-    <section id="home" class="container">
-        <h2>Independent Marketing Science, AI & Measurement Strategy Advisory</h2>
+    <section id="home" class="container hero-section">
+        <h2>Independent Marketing Performance, Measurement &amp; Investment Advisory</h2>
 
         <div class="homepage-advisory-cta">
-            <p class="homepage-cta-copy">Have a measurement or marketing economics decision you need to work through?</p>
+            <p>Have a measurement or marketing economics decision you need to work through?</p>
             <a class="homepage-cta-button" href="https://calendly.com/andres-themarketingscientist/some-context" target="_blank" rel="noopener noreferrer">Schedule a call</a>
-            <img src="profile.jpg" alt="Andrés Acosta" class="profile-photo">
+        </div>
+    </section>
+
+    <section id="profile" class="container profile-section">
+        <img src="profile.jpg" alt="Andrés Acosta" class="profile-photo">
+
+        <p>I’m Andrés Acosta, a Marketing Science and AI executive with more than 15 years of experience helping organizations turn data, measurement and advanced analytics into better business decisions, stronger marketing investment strategies and measurable commercial impact.</p>
+
+        <p>I help executives answer two high-value questions:</p>
+
+        <div class="executive-questions">
+            <p class="executive-question"><strong>Is marketing producing profitable growth, what is driving that performance, and what should we change?</strong></p>
+            <p class="executive-question"><strong>Are we about to invest in something that is credible, economically justified and appropriate for our business?</strong></p>
         </div>
 
-        <p>I'm Andrés Acosta, a Marketing Science and AI executive with over 15 years of experience helping organizations turn advanced analytics into better business decisions, better marketing investment strategies and commercial impact.</p>
+        <p>My work connects marketing activity with customer economics, commercial performance and financial outcomes. I also provide independent reviews of agencies, analytics providers, marketing technology, AI initiatives, measurement claims, media strategies, forecasts and business cases.</p>
 
-        <p>Most organizations lack senior interpretation, governance, adoption and clear decision frameworks. My work focuses on helping leaders understand what can be trusted, what cannot, what decisions models support and how different vendors compare against each other.</p>
+        <p>The objective is not more reporting or technical complexity. It is better judgment about where value is being created, what can be trusted and where the company should invest next.</p>
+    </section>
 
-        <p>The Marketing Scientist provides independent advisory support for executives, growth teams and investors evaluating marketing measurement systems, AI based Marketing Science and Measurement products, vendor claims, attribution platforms, MMM providers, incrementality programs and agency/platform measurement outputs.</p>
+    <section id="services" class="container">
+        <h2>Advisory Services</h2>
 
-        
-        <h3>Core Advisory Areas</h3>
-        <ul>
-            <li>Marketing Financial Strategy: Growth Economics, Customer Economics, LTV/CAC Frameworks and Budget Allocation Strategies, Contribution Margin, Profit Contribution Margin and Return on Marketing Investment</li>
-            <li>Marketing measurement architecture across creative performance, attribution, experimentation, customer analytics, precision marketing, media reporting and executive decision making.</li>
-            <li>AI and Marketing Science product strategy focused on adoption, usability, commercialization and business impact.</li>
-            <li>Build-vs-buy-vs-agency evaluation for measurement platforms, capabilities and AI Marketing Science products.</li>
-            <li>Executive translation of models into media and audience strategy, budget decisions, commercial priorities and governance.</li>
-            <li>Independent second opinions on audience modeling deliveries, brand measurement, creative performance measurement, attribution, incrementality, geo-testing and vendor reports.</li>
-                        
-        </ul>
+        <div class="services-list">
+            <article class="service-card">
+                <h3>Marketing Performance &amp; Economics</h3>
+                <p class="service-subtitle">Understand how marketing creates profitable growth, what is constraining performance and what the company should change.</p>
+
+                <p>This service connects five parts of the marketing value system:</p>
+
+                <ul>
+                    <li><strong>Executive outcomes:</strong> revenue growth, contribution margin, cash generation, customer-base growth and capital efficiency.</li>
+                    <li><strong>Customer economics:</strong> acquisition cost, lifetime value, payback, retention, repeat purchasing, cohort quality and customer profitability.</li>
+                    <li><strong>Commercial drivers:</strong> pricing, promotions, penetration, share of wallet, product and customer mix, distribution, cannibalization and cost to serve.</li>
+                    <li><strong>Marketing drivers:</strong> brand, media allocation, reach, frequency, creative, audiences, conversion, search, promotional execution and availability.</li>
+                    <li><strong>Measurement and evidence:</strong> experiments, Marketing Mix Modeling, incrementality, cohort analysis, causal inference, forecasting and scenario analysis.</li>
+                </ul>
+
+                <h4>Evidence levels</h4>
+
+                <div class="evidence-grid">
+                    <div class="evidence-level">
+                        <h5>Evidence-Informed Diagnostic</h5>
+                        <p>Business data, established research, structured calculations, benchmarks and senior expert judgment.</p>
+                    </div>
+                    <div class="evidence-level">
+                        <h5>Directional Analytics</h5>
+                        <p>Customer and commercial decompositions, cohort analysis, scenarios, lightweight econometrics and directional evidence.</p>
+                    </div>
+                    <div class="evidence-level">
+                        <h5>Causal Measurement Program</h5>
+                        <p>Formal experiments, MMM, causal modeling, calibration, optimization, uncertainty analysis and measurement governance.</p>
+                    </div>
+                </div>
+
+                <h4>Typical questions</h4>
+
+                <ul>
+                    <li>Is marketing producing profitable rather than merely attributable growth?</li>
+                    <li>Which customer, commercial and marketing drivers explain current performance?</li>
+                    <li>Are acquisition costs justified by customer quality, margin and payback?</li>
+                    <li>Is the business overdependent on paid demand capture or discounting?</li>
+                    <li>How should investment change across brand, media, pricing, promotions and customer growth?</li>
+                    <li>What additional evidence is required before making a major budget decision?</li>
+                </ul>
+            </article>
+
+            <article class="service-card">
+                <h3>Independent Investment Review</h3>
+                <p class="service-subtitle">Determine whether a proposed investment is credible, economically justified and appropriate for the organization before committing budget, time and reputation.</p>
+
+                <p>Independent reviews may cover:</p>
+
+                <ul class="coverage-list">
+                    <li>Agency proposals</li>
+                    <li>Digital-transformation projects</li>
+                    <li>Marketing technology</li>
+                    <li>CRM and CDP initiatives</li>
+                    <li>Artificial-intelligence initiatives</li>
+                    <li>Analytics and measurement providers</li>
+                    <li>Media strategies</li>
+                    <li>Measurement and ROI claims</li>
+                    <li>Commercial forecasts</li>
+                    <li>Business cases</li>
+                </ul>
+
+                <h4>Each review considers</h4>
+
+                <ul>
+                    <li><strong>Credibility:</strong> Are the methodology, assumptions and promised outcomes defensible?</li>
+                    <li><strong>Economic justification:</strong> Are the costs, expected value, risks and payback realistic?</li>
+                    <li><strong>Organizational fit:</strong> Does the company have the data, capabilities, processes and adoption conditions required?</li>
+                    <li><strong>Alternatives:</strong> Is there a simpler, cheaper or more appropriate way to solve the problem?</li>
+                    <li><strong>Execution risk:</strong> What dependencies, incentives, hidden costs and implementation risks are being overlooked?</li>
+                </ul>
+
+                <p class="service-output">The output is an independent recommendation to approve, revise, negotiate, postpone or reject the proposed initiative.</p>
+            </article>
+        </div>
     </section>
 
     <section id="impact" class="container">
@@ -264,8 +452,9 @@
             <li>Led large-scale global Marketing Mix Modeling programs, delivering hundreds of models per year.</li>
             <li>Built and scaled regional data, analytics, AI, and Marketing Science teams for global advertising holding companies.</li>
             <li>Reduced Customer Acquisition Costs by 40% for a regional telecom business through advanced optimization algorithms.</li>
-            <li>Advised executive stakeholders on measurement strategy, vendor evaluation, measurement alternatives, commercialization opportunities, product positioning and client risk mitigation.</li>
-            <li>Owned the product strategy and roadmap for AI analytics capabilities, including causal measurement, customer intelligence, brand measurement and experiment based decision frameworks.</li>
+            <li>Connected customer acquisition, marketing effectiveness and commercial drivers with revenue, contribution and executive decision-making across multiple industries and markets.</li>
+            <li>Advised executive stakeholders on marketing economics, measurement strategy, budget allocation, vendor evaluation, commercial opportunities and investment risk.</li>
+            <li>Owned product strategy and roadmaps for AI and analytics capabilities spanning causal measurement, customer intelligence, brand measurement, experimentation and decision support.</li>
             <li>Partnered with executive and commercial stakeholders to advance AI products from concept to validation, pilot design and deployment.</li>
             <li>I understand the agency and platform business from the inside, including where vendor profitability, vendor incentives and client profitability diverge.</li>
             
@@ -288,33 +477,64 @@
     </section>
 
     
-    <section class="container">
+    <section id="work-with-me" class="container">
         <h2>Work With Me</h2>
 
-        <p>The Marketing Scientist is designed for organizations that need independent executive judgment before making high-stakes decisions about marketing measurement, AI strategy, platform vendors, agencies or internal capabilities.</p>
+        <p>The Marketing Scientist is designed for executives and organizations facing high-value decisions about marketing performance, measurement, technology, analytics and growth investment.</p>
 
-        <p>Typical situations include:</p>
-
-        <ul>
-            <li>Evaluating whether to trust a measurement vendor, platform, agency/platform output or internal analytics recommendation.</li>
-            <li>Turning sophisticated models or AI outputs into commercially useful decisions, adoption and governance.</li>
-            <li>Translating technical analysis into executive decisions, budget actions, commercial priorities and governance.</li>
-            <li>Reviewing MMM, attribution, incrementality, audience modeling, brand measurement, creative measurement or other Marketing Science outputs before making budget decisions.</li>
-            <li>Redesigning marketing measurement architecture across models, experiments, dashboards, vendors, operating models and executive decision processes.</li>
-            <li>Interpreting and evaluating MMM, measurement, incrementality or other Marketing Science outputs.</li>
-            <li>Assessing build-vs-buy-vs-agency decisions before investing in measurement platforms, measurement capabilities or AI based Marketing Science products.</li>
-
-        </ul>
-
-        <div class="homepage-cta homepage-cta-work-with-me">
-            <p class="homepage-cta-copy">Have a complex Marketing Science decision ahead? Let’s discuss the options, trade-offs and risks.</p>
-            <a class="homepage-cta-button" href="https://calendly.com/andres-themarketingscientist/some-context" target="_blank" rel="noopener noreferrer">Schedule a call</a>
+        <div class="work-path">
+            <h3>Improve Marketing Performance</h3>
+            <p>This is appropriate when you need to:</p>
+            <ul>
+                <li>Understand whether marketing is creating profitable growth.</li>
+                <li>Connect marketing activity with customer economics, pricing, margin and cash flow.</li>
+                <li>Diagnose rising CAC, weak payback, poor retention or declining customer quality.</li>
+                <li>Evaluate brand versus demand-capture investment.</li>
+                <li>Identify whether pricing, promotions, distribution, product mix or tactical execution are constraining growth.</li>
+                <li>Build an executive marketing scorecard and value-driver system.</li>
+                <li>Strengthen the evidence behind budget allocation through diagnostics, directional analytics, experiments or causal modeling.</li>
+                <li>Translate analysis into specific commercial and marketing actions.</li>
+            </ul>
         </div>
 
-        <a href="https://www.linkedin.com/in/themarketingscientist/" target="_blank" class="linkedin-button work-with-me-linkedin">
-            <img src="linkedin-icon.png" alt="The Marketing Scientist" class="linkedin-icon"> Connect on LinkedIn
-        </a>
+        <div class="work-path">
+            <h3>Review an Investment Before Approval</h3>
+            <p>This is appropriate when you need to:</p>
+            <ul>
+                <li>Evaluate an agency, technology, analytics or AI proposal.</li>
+                <li>Challenge a vendor’s measurement, attribution, incrementality or ROI claims.</li>
+                <li>Review a media strategy, commercial forecast or business case.</li>
+                <li>Determine whether promised benefits are supported by the available data and organizational capabilities.</li>
+                <li>Identify hidden costs, dependencies, implementation risks and misaligned incentives.</li>
+                <li>Compare a proposed solution with simpler or more economical alternatives.</li>
+                <li>Obtain an independent recommendation before approval, renewal, negotiation or implementation.</li>
+            </ul>
+        </div>
+
+        <div class="start-decision">
+            <h3>Start With the Decision</h3>
+            <p>Every engagement begins by defining:</p>
+            <ul>
+                <li>the decision that must be made;</li>
+                <li>the financial or commercial outcome at stake;</li>
+                <li>the evidence currently available;</li>
+                <li>the degree of confidence required;</li>
+                <li>and the most proportionate analytical approach.</li>
+            </ul>
+            <p>The result may be an evidence-informed executive diagnostic, a directional analysis, a causal measurement program or an independent investment review.</p>
+        </div>
+
+        <div class="homepage-cta-work-with-me">
+            <p>Have a complex Marketing Science decision ahead? Let’s discuss the options, trade-offs and risks.</p>
+            <a class="homepage-cta-button" href="https://calendly.com/andres-themarketingscientist/some-context" target="_blank" rel="noopener noreferrer">Schedule a call</a>
+        </div>
     </section>
+
+    <aside class="container homepage-contact" aria-label="Discuss an Executive Decision">
+        <a href="https://www.linkedin.com/in/themarketingscientist/" target="_blank" rel="noopener noreferrer" class="linkedin-button">
+            <img src="linkedin-icon.png" alt="The Marketing Scientist" class="linkedin-icon"> Discuss an Executive Decision
+        </a>
+    </aside>
 
     <footer>
         <p>&copy; 2026 The Marketing Scientist. All rights reserved. <a href="#">Privacy Policy</a></p>
