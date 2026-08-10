@@ -186,6 +186,7 @@ body .site-header {
   border-left: 4px solid var(--primary-color);
   border-radius: 8px;
   box-shadow: 0 3px 10px rgba(44, 44, 84, 0.08);
+  text-align: center;
 }
 
 .article-cta .article-cta-question {
@@ -193,14 +194,14 @@ body .site-header {
   color: var(--primary-color);
   font-size: 1.15rem;
   line-height: 1.45;
-  text-align: left !important;
+  text-align: center !important;
 }
 
 .article-cta .article-cta-description {
   margin: 0 0 1.25rem;
   color: var(--text-color);
   line-height: 1.65;
-  text-align: left !important;
+  text-align: center !important;
 }
 
 .article-cta-button {
