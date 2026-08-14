@@ -31,8 +31,6 @@ execute:
 </header>
 ```
 
-# When “Unprofitable” Is Still Worth Keeping 
-
 In marketing, we’re overly obsessed with ROAS, but business reality can very easily show why the obsession is unjustified. 
 
 A customer can be unprofitable and still be worth keeping. A media channel can generate mediocre ROAS and still make economic sense. 
